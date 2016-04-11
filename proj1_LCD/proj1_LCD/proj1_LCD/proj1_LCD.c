@@ -52,8 +52,12 @@ int main(void) {
 	lcd_wr_cmd(0b00000110); // set entry mode
 	_delay_ms(1);
 	
-	lcd_wr_cmd(0b01000000); //set cg ram address
+	
+	//lcd_wr_data(0b00000001);
+	
+	lcd_wr_cmd(0b01001000); //set cg ram address
 	_delay_us(50);
+	
 	
 	lcd_wr_data(0b00000);
 	lcd_wr_data(0b00000);
@@ -64,10 +68,8 @@ int main(void) {
 	lcd_wr_data(0b01110);
 	lcd_wr_data(0b00000);
 	
-	lcd_wr_cmd(0b10000000);
+	lcd_wr_cmd(0b10000000); // set dd ram address
 	_delay_us(50);
-	
-	lcd_wr_data(0);
 						
 	lcd_write_string("Hello World!");
 
@@ -76,7 +78,8 @@ int main(void) {
 			lcd_wr_cmd(0b00000001); // clear display
 			_delay_ms(5);
 			
-			lcd_write_string("dA king");
+			lcd_write_string("329 = ");
+			lcd_wr_data(1);
 		}
 	}
 	
