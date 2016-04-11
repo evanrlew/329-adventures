@@ -3,29 +3,29 @@ proj1_LCD.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000008  00800100  00000224  000002b8  2**0
+  0 .data         00000000  00800100  00000238  000002cc  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000224  00000000  00000000  00000094  2**1
+  1 .text         00000238  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000001  00800108  00800108  000002c0  2**0
+  2 .bss          00000001  00800100  00800100  000002cc  2**0
                   ALLOC
-  3 .stab         000006cc  00000000  00000000  000002c0  2**2
+  3 .stab         000006cc  00000000  00000000  000002cc  2**2
                   CONTENTS, READONLY, DEBUGGING
-  4 .stabstr      00000085  00000000  00000000  0000098c  2**0
+  4 .stabstr      00000085  00000000  00000000  00000998  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_aranges 00000080  00000000  00000000  00000a18  2**3
+  5 .debug_aranges 00000080  00000000  00000000  00000a20  2**3
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   000007e8  00000000  00000000  00000a98  2**0
+  6 .debug_info   0000079e  00000000  00000000  00000aa0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000001aa  00000000  00000000  00001280  2**0
+  7 .debug_abbrev 00000181  00000000  00000000  0000123e  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   000003d5  00000000  00000000  0000142a  2**0
+  8 .debug_line   000003d9  00000000  00000000  000013bf  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000070  00000000  00000000  00001800  2**2
+  9 .debug_frame  00000090  00000000  00000000  00001798  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00000175  00000000  00000000  00001870  2**0
+ 10 .debug_str    00000175  00000000  00000000  00001828  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000000f5  00000000  00000000  000019e5  2**0
+ 11 .debug_loc    000000f8  00000000  00000000  0000199d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -38,7 +38,7 @@ Disassembly of section .text:
   10:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   14:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   18:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
-  1c:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
+  1c:	0c 94 f8 00 	jmp	0x1f0	; 0x1f0 <__vector_7>
   20:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   24:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   28:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
@@ -87,18 +87,18 @@ Disassembly of section .text:
   b8:	11 e0       	ldi	r17, 0x01	; 1
   ba:	a0 e0       	ldi	r26, 0x00	; 0
   bc:	b1 e0       	ldi	r27, 0x01	; 1
-  be:	e4 e2       	ldi	r30, 0x24	; 36
+  be:	e8 e3       	ldi	r30, 0x38	; 56
   c0:	f2 e0       	ldi	r31, 0x02	; 2
   c2:	02 c0       	rjmp	.+4      	; 0xc8 <__do_copy_data+0x10>
   c4:	05 90       	lpm	r0, Z+
   c6:	0d 92       	st	X+, r0
-  c8:	a8 30       	cpi	r26, 0x08	; 8
+  c8:	a0 30       	cpi	r26, 0x00	; 0
   ca:	b1 07       	cpc	r27, r17
   cc:	d9 f7       	brne	.-10     	; 0xc4 <__do_copy_data+0xc>
 
 000000ce <__do_clear_bss>:
   ce:	11 e0       	ldi	r17, 0x01	; 1
-  d0:	a8 e0       	ldi	r26, 0x08	; 8
+  d0:	a0 e0       	ldi	r26, 0x00	; 0
   d2:	b1 e0       	ldi	r27, 0x01	; 1
   d4:	01 c0       	rjmp	.+2      	; 0xd8 <.do_clear_bss_start>
 
@@ -106,19 +106,19 @@ Disassembly of section .text:
   d6:	1d 92       	st	X+, r1
 
 000000d8 <.do_clear_bss_start>:
-  d8:	a9 30       	cpi	r26, 0x09	; 9
+  d8:	a1 30       	cpi	r26, 0x01	; 1
   da:	b1 07       	cpc	r27, r17
   dc:	e1 f7       	brne	.-8      	; 0xd6 <.do_clear_bss_loop>
   de:	0e 94 a7 00 	call	0x14e	; 0x14e <main>
-  e2:	0c 94 10 01 	jmp	0x220	; 0x220 <_exit>
+  e2:	0c 94 1a 01 	jmp	0x234	; 0x234 <_exit>
 
 000000e6 <__bad_interrupt>:
   e6:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
 
 000000ea <lcd_wr_cmd>:
-#include <util/delay.h>    // software delay functions
+#include <avr/interrupt.h>
 
-static char btn_cnt = 0;
+static unsigned char btn_cnt = 0;
 
 void lcd_wr_cmd(uint8_t input) {
 	PORTB |= 0b00000100; // E = 1
@@ -234,184 +234,172 @@ int main(void) {
  152:	87 e0       	ldi	r24, 0x07	; 7
  154:	84 b9       	out	0x04, r24	; 4
 	
-	PORTB |= 1 << PB3;
- 156:	2b 9a       	sbi	0x05, 3	; 5
+	PORTE |= 1 << 6;
+ 156:	76 9a       	sbi	0x0e, 6	; 14
+	
+	// enable external interrupt on PE6
+	EICRB |= 0b00100000;
+ 158:	ea e6       	ldi	r30, 0x6A	; 106
+ 15a:	f0 e0       	ldi	r31, 0x00	; 0
+ 15c:	80 81       	ld	r24, Z
+ 15e:	80 62       	ori	r24, 0x20	; 32
+ 160:	80 83       	st	Z, r24
+	EIMSK |= 1 << 6; 
+ 162:	ee 9a       	sbi	0x1d, 6	; 29
+	
+	sei();
+ 164:	78 94       	sei
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 158:	8f ef       	ldi	r24, 0xFF	; 255
- 15a:	93 ef       	ldi	r25, 0xF3	; 243
- 15c:	a1 e0       	ldi	r26, 0x01	; 1
- 15e:	81 50       	subi	r24, 0x01	; 1
- 160:	90 40       	sbci	r25, 0x00	; 0
- 162:	a0 40       	sbci	r26, 0x00	; 0
- 164:	e1 f7       	brne	.-8      	; 0x15e <main+0x10>
- 166:	00 c0       	rjmp	.+0      	; 0x168 <main+0x1a>
- 168:	00 00       	nop
+ 166:	8f ef       	ldi	r24, 0xFF	; 255
+ 168:	93 ef       	ldi	r25, 0xF3	; 243
+ 16a:	a1 e0       	ldi	r26, 0x01	; 1
+ 16c:	81 50       	subi	r24, 0x01	; 1
+ 16e:	90 40       	sbci	r25, 0x00	; 0
+ 170:	a0 40       	sbci	r26, 0x00	; 0
+ 172:	e1 f7       	brne	.-8      	; 0x16c <main+0x1e>
+ 174:	00 c0       	rjmp	.+0      	; 0x176 <main+0x28>
+ 176:	00 00       	nop
 	
 	_delay_ms(40);
 
 	lcd_wr_cmd(0b00111000);
- 16a:	88 e3       	ldi	r24, 0x38	; 56
- 16c:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
+ 178:	88 e3       	ldi	r24, 0x38	; 56
+ 17a:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 170:	a7 ec       	ldi	r26, 0xC7	; 199
- 172:	b0 e0       	ldi	r27, 0x00	; 0
- 174:	11 97       	sbiw	r26, 0x01	; 1
- 176:	f1 f7       	brne	.-4      	; 0x174 <main+0x26>
- 178:	00 c0       	rjmp	.+0      	; 0x17a <main+0x2c>
- 17a:	00 00       	nop
+ 17e:	a7 ec       	ldi	r26, 0xC7	; 199
+ 180:	b0 e0       	ldi	r27, 0x00	; 0
+ 182:	11 97       	sbiw	r26, 0x01	; 1
+ 184:	f1 f7       	brne	.-4      	; 0x182 <main+0x34>
+ 186:	00 c0       	rjmp	.+0      	; 0x188 <main+0x3a>
+ 188:	00 00       	nop
 	_delay_us(50);
 	
 	lcd_wr_cmd(0b00001100); // turn on display
- 17c:	8c e0       	ldi	r24, 0x0C	; 12
- 17e:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
- 182:	87 ec       	ldi	r24, 0xC7	; 199
- 184:	90 e0       	ldi	r25, 0x00	; 0
- 186:	01 97       	sbiw	r24, 0x01	; 1
- 188:	f1 f7       	brne	.-4      	; 0x186 <main+0x38>
- 18a:	00 c0       	rjmp	.+0      	; 0x18c <main+0x3e>
- 18c:	00 00       	nop
+ 18a:	8c e0       	ldi	r24, 0x0C	; 12
+ 18c:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
+ 190:	87 ec       	ldi	r24, 0xC7	; 199
+ 192:	90 e0       	ldi	r25, 0x00	; 0
+ 194:	01 97       	sbiw	r24, 0x01	; 1
+ 196:	f1 f7       	brne	.-4      	; 0x194 <main+0x46>
+ 198:	00 c0       	rjmp	.+0      	; 0x19a <main+0x4c>
+ 19a:	00 00       	nop
 	_delay_us(50);
 	
 	lcd_wr_cmd(0b00000001); // clear display
- 18e:	81 e0       	ldi	r24, 0x01	; 1
- 190:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
+ 19c:	81 e0       	ldi	r24, 0x01	; 1
+ 19e:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 194:	af e1       	ldi	r26, 0x1F	; 31
- 196:	be e4       	ldi	r27, 0x4E	; 78
- 198:	11 97       	sbiw	r26, 0x01	; 1
- 19a:	f1 f7       	brne	.-4      	; 0x198 <main+0x4a>
- 19c:	00 c0       	rjmp	.+0      	; 0x19e <main+0x50>
- 19e:	00 00       	nop
+ 1a2:	af e1       	ldi	r26, 0x1F	; 31
+ 1a4:	be e4       	ldi	r27, 0x4E	; 78
+ 1a6:	11 97       	sbiw	r26, 0x01	; 1
+ 1a8:	f1 f7       	brne	.-4      	; 0x1a6 <main+0x58>
+ 1aa:	00 c0       	rjmp	.+0      	; 0x1ac <main+0x5e>
+ 1ac:	00 00       	nop
 	_delay_ms(5);
 	
 	lcd_wr_cmd(0b00000110); // set entry mode
- 1a0:	86 e0       	ldi	r24, 0x06	; 6
- 1a2:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
- 1a6:	8f e9       	ldi	r24, 0x9F	; 159
- 1a8:	9f e0       	ldi	r25, 0x0F	; 15
- 1aa:	01 97       	sbiw	r24, 0x01	; 1
- 1ac:	f1 f7       	brne	.-4      	; 0x1aa <main+0x5c>
- 1ae:	00 c0       	rjmp	.+0      	; 0x1b0 <main+0x62>
- 1b0:	00 00       	nop
-	_delay_ms(1);
-			
-//	lcd_write_string("Hello World!");
-
-	lcd_wr_cmd(0b10000000 | 0x45);
- 1b2:	85 ec       	ldi	r24, 0xC5	; 197
- 1b4:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 1b8:	a7 ec       	ldi	r26, 0xC7	; 199
- 1ba:	b0 e0       	ldi	r27, 0x00	; 0
- 1bc:	11 97       	sbiw	r26, 0x01	; 1
- 1be:	f1 f7       	brne	.-4      	; 0x1bc <main+0x6e>
- 1c0:	00 c0       	rjmp	.+0      	; 0x1c2 <main+0x74>
- 1c2:	00 00       	nop
-	_delay_us(50);
-	lcd_wr_data('L');
- 1c4:	8c e4       	ldi	r24, 0x4C	; 76
- 1c6:	0e 94 7d 00 	call	0xfa	; 0xfa <lcd_wr_data>
-	
-	lcd_wr_cmd(0b10000000 | 0x0A);
- 1ca:	8a e8       	ldi	r24, 0x8A	; 138
- 1cc:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
- 1d0:	87 ec       	ldi	r24, 0xC7	; 199
- 1d2:	90 e0       	ldi	r25, 0x00	; 0
- 1d4:	01 97       	sbiw	r24, 0x01	; 1
- 1d6:	f1 f7       	brne	.-4      	; 0x1d4 <main+0x86>
- 1d8:	00 c0       	rjmp	.+0      	; 0x1da <main+0x8c>
- 1da:	00 00       	nop
-	_delay_us(50);
-	lcd_wr_data('b');
- 1dc:	82 e6       	ldi	r24, 0x62	; 98
- 1de:	0e 94 7d 00 	call	0xfa	; 0xfa <lcd_wr_data>
-		if (btn_cnt == 1) {
-//		if (PINB ^ 1 << PB3) {
-			lcd_wr_cmd(0b00000001); // clear display
-			_delay_ms(5);
-			
-			lcd_write_string("dA king");
- 1e2:	c0 e0       	ldi	r28, 0x00	; 0
- 1e4:	d1 e0       	ldi	r29, 0x01	; 1
-	lcd_wr_cmd(0b10000000 | 0x0A);
-	_delay_us(50);
-	lcd_wr_data('b');
+ 1ae:	86 e0       	ldi	r24, 0x06	; 6
+ 1b0:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
+ 1b4:	8f e9       	ldi	r24, 0x9F	; 159
+ 1b6:	9f e0       	ldi	r25, 0x0F	; 15
+ 1b8:	01 97       	sbiw	r24, 0x01	; 1
+ 1ba:	f1 f7       	brne	.-4      	; 0x1b8 <main+0x6a>
+ 1bc:	00 c0       	rjmp	.+0      	; 0x1be <main+0x70>
+ 1be:	00 00       	nop
+	lcd_wr_data('b');*/
 
 	while (2) {
-		if (btn_cnt == 1) {
- 1e6:	80 91 08 01 	lds	r24, 0x0108
- 1ea:	81 30       	cpi	r24, 0x01	; 1
- 1ec:	61 f4       	brne	.+24     	; 0x206 <main+0xb8>
+//		if (btn_cnt == 1) {
 //		if (PINB ^ 1 << PB3) {
 			lcd_wr_cmd(0b00000001); // clear display
- 1ee:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
-
-	__builtin_avr_delay_cycles(__ticks_dc);
- 1f2:	af e1       	ldi	r26, 0x1F	; 31
- 1f4:	be e4       	ldi	r27, 0x4E	; 78
- 1f6:	11 97       	sbiw	r26, 0x01	; 1
- 1f8:	f1 f7       	brne	.-4      	; 0x1f6 <main+0xa8>
- 1fa:	00 c0       	rjmp	.+0      	; 0x1fc <main+0xae>
- 1fc:	00 00       	nop
+ 1c0:	81 e0       	ldi	r24, 0x01	; 1
+ 1c2:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
+ 1c6:	af e1       	ldi	r26, 0x1F	; 31
+ 1c8:	be e4       	ldi	r27, 0x4E	; 78
+ 1ca:	11 97       	sbiw	r26, 0x01	; 1
+ 1cc:	f1 f7       	brne	.-4      	; 0x1ca <main+0x7c>
+ 1ce:	00 c0       	rjmp	.+0      	; 0x1d0 <main+0x82>
+ 1d0:	00 00       	nop
 			_delay_ms(5);
 			
-			lcd_write_string("dA king");
- 1fe:	ce 01       	movw	r24, r28
- 200:	0e 94 98 00 	call	0x130	; 0x130 <lcd_write_string>
- 204:	f0 cf       	rjmp	.-32     	; 0x1e6 <main+0x98>
- 206:	ff cf       	rjmp	.-2      	; 0x206 <main+0xb8>
+			//lcd_write_string("dA king");
+			
+			lcd_wr_data(btn_cnt + '0');
+ 1d2:	80 91 00 01 	lds	r24, 0x0100
+ 1d6:	80 5d       	subi	r24, 0xD0	; 208
+ 1d8:	0e 94 7d 00 	call	0xfa	; 0xfa <lcd_wr_data>
+ 1dc:	8f ef       	ldi	r24, 0xFF	; 255
+ 1de:	91 ee       	ldi	r25, 0xE1	; 225
+ 1e0:	a4 e0       	ldi	r26, 0x04	; 4
+ 1e2:	81 50       	subi	r24, 0x01	; 1
+ 1e4:	90 40       	sbci	r25, 0x00	; 0
+ 1e6:	a0 40       	sbci	r26, 0x00	; 0
+ 1e8:	e1 f7       	brne	.-8      	; 0x1e2 <main+0x94>
+ 1ea:	00 c0       	rjmp	.+0      	; 0x1ec <main+0x9e>
+ 1ec:	00 00       	nop
+ 1ee:	e8 cf       	rjmp	.-48     	; 0x1c0 <main+0x72>
 
-00000208 <ISR>:
+000001f0 <__vector_7>:
+	}
 	
 	return 1;
 }
 
-ISR(INT3_vect) {
+ISR(INT6_vect) {
+ 1f0:	1f 92       	push	r1
+ 1f2:	0f 92       	push	r0
+ 1f4:	0f b6       	in	r0, 0x3f	; 63
+ 1f6:	0f 92       	push	r0
+ 1f8:	11 24       	eor	r1, r1
+ 1fa:	8f 93       	push	r24
+ 1fc:	9f 93       	push	r25
+ 1fe:	af 93       	push	r26
+ 200:	bf 93       	push	r27
+	cli();
+ 202:	f8 94       	cli
 	btn_cnt++;
- 208:	80 91 08 01 	lds	r24, 0x0108
- 20c:	8f 5f       	subi	r24, 0xFF	; 255
- 20e:	80 93 08 01 	sts	0x0108, r24
-	#else
-		//round up by default
-		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
-	#endif
+ 204:	80 91 00 01 	lds	r24, 0x0100
+ 208:	8f 5f       	subi	r24, 0xFF	; 255
+ 20a:	80 93 00 01 	sts	0x0100, r24
+ 20e:	8f ef       	ldi	r24, 0xFF	; 255
+ 210:	99 e6       	ldi	r25, 0x69	; 105
+ 212:	a8 e1       	ldi	r26, 0x18	; 24
+ 214:	81 50       	subi	r24, 0x01	; 1
+ 216:	90 40       	sbci	r25, 0x00	; 0
+ 218:	a0 40       	sbci	r26, 0x00	; 0
+ 21a:	e1 f7       	brne	.-8      	; 0x214 <__vector_7+0x24>
+ 21c:	00 c0       	rjmp	.+0      	; 0x21e <__vector_7+0x2e>
+ 21e:	00 00       	nop
+	_delay_ms(500);
+	sei();
+ 220:	78 94       	sei
+ 222:	bf 91       	pop	r27
+ 224:	af 91       	pop	r26
+ 226:	9f 91       	pop	r25
+ 228:	8f 91       	pop	r24
+ 22a:	0f 90       	pop	r0
+ 22c:	0f be       	out	0x3f, r0	; 63
+ 22e:	0f 90       	pop	r0
+ 230:	1f 90       	pop	r1
+ 232:	18 95       	reti
 
-	__builtin_avr_delay_cycles(__ticks_dc);
- 212:	8f ec       	ldi	r24, 0xCF	; 207
- 214:	97 e0       	ldi	r25, 0x07	; 7
- 216:	01 97       	sbiw	r24, 0x01	; 1
- 218:	f1 f7       	brne	.-4      	; 0x216 <ISR+0xe>
- 21a:	00 c0       	rjmp	.+0      	; 0x21c <ISR+0x14>
- 21c:	00 00       	nop
-	_delay_us(500);
- 21e:	08 95       	ret
+00000234 <_exit>:
+ 234:	f8 94       	cli
 
-00000220 <_exit>:
- 220:	f8 94       	cli
-
-00000222 <__stop_program>:
- 222:	ff cf       	rjmp	.-2      	; 0x222 <__stop_program>
+00000236 <__stop_program>:
+ 236:	ff cf       	rjmp	.-2      	; 0x236 <__stop_program>
