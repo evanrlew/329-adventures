@@ -51,7 +51,24 @@ int main(void) {
 	
 	lcd_wr_cmd(0b00000110); // set entry mode
 	_delay_ms(1);
-			
+	
+	lcd_wr_cmd(0b01000000); //set cg ram address
+	_delay_us(50);
+	
+	lcd_wr_data(0b00000);
+	lcd_wr_data(0b00000);
+	lcd_wr_data(0b00000);
+	lcd_wr_data(0b01010);
+	lcd_wr_data(0b00000);
+	lcd_wr_data(0b10001);
+	lcd_wr_data(0b01110);
+	lcd_wr_data(0b00000);
+	
+	lcd_wr_cmd(0b10000000);
+	_delay_us(50);
+	
+	lcd_wr_data(0);
+						
 	lcd_write_string("Hello World!");
 
 	while (2) {
