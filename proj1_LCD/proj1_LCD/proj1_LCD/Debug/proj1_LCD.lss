@@ -3,7 +3,7 @@ proj1_LCD.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000016  00800100  0000023a  000002ae  2**0
+  0 .data         00000014  00800100  0000023a  000002ae  2**0
                   CONTENTS, ALLOC, LOAD, DATA
   1 .text         0000023a  00000000  00000000  00000074  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
@@ -90,13 +90,13 @@ Disassembly of section .text:
   c2:	02 c0       	rjmp	.+4      	; 0xc8 <__do_copy_data+0x10>
   c4:	05 90       	lpm	r0, Z+
   c6:	0d 92       	st	X+, r0
-  c8:	a6 31       	cpi	r26, 0x16	; 22
+  c8:	a4 31       	cpi	r26, 0x14	; 20
   ca:	b1 07       	cpc	r27, r17
   cc:	d9 f7       	brne	.-10     	; 0xc4 <__do_copy_data+0xc>
 
 000000ce <__do_clear_bss>:
   ce:	11 e0       	ldi	r17, 0x01	; 1
-  d0:	a6 e1       	ldi	r26, 0x16	; 22
+  d0:	a4 e1       	ldi	r26, 0x14	; 20
   d2:	b1 e0       	ldi	r27, 0x01	; 1
   d4:	01 c0       	rjmp	.+2      	; 0xd8 <.do_clear_bss_start>
 
@@ -104,7 +104,7 @@ Disassembly of section .text:
   d6:	1d 92       	st	X+, r1
 
 000000d8 <.do_clear_bss_start>:
-  d8:	a6 31       	cpi	r26, 0x16	; 22
+  d8:	a4 31       	cpi	r26, 0x14	; 20
   da:	b1 07       	cpc	r27, r17
   dc:	e1 f7       	brne	.-8      	; 0xd6 <.do_clear_bss_loop>
   de:	0e 94 a7 00 	call	0x14e	; 0x14e <main>
@@ -305,8 +305,11 @@ int main(void) {
  1ae:	00 00       	nop
 	_delay_ms(1);
 	
-	lcd_wr_cmd(0b01000000); //set cg ram address
- 1b0:	80 e4       	ldi	r24, 0x40	; 64
+	
+	//lcd_wr_data(0b00000001);
+	
+	lcd_wr_cmd(0b01001000); //set cg ram address
+ 1b0:	88 e4       	ldi	r24, 0x48	; 72
  1b2:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
 	#else
 		//round up by default
@@ -321,6 +324,7 @@ int main(void) {
  1be:	00 c0       	rjmp	.+0      	; 0x1c0 <main+0x72>
  1c0:	00 00       	nop
 	_delay_us(50);
+	
 	
 	lcd_wr_data(0b00000);
  1c2:	80 e0       	ldi	r24, 0x00	; 0
@@ -347,7 +351,7 @@ int main(void) {
  1ec:	80 e0       	ldi	r24, 0x00	; 0
  1ee:	0e 94 7d 00 	call	0xfa	; 0xfa <lcd_wr_data>
 	
-	lcd_wr_cmd(0b10000000);
+	lcd_wr_cmd(0b10000000); // set dd ram address
  1f2:	80 e8       	ldi	r24, 0x80	; 128
  1f4:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
  1f8:	87 ec       	ldi	r24, 0xC7	; 199
@@ -357,53 +361,52 @@ int main(void) {
  200:	00 c0       	rjmp	.+0      	; 0x202 <main+0xb4>
  202:	00 00       	nop
 	_delay_us(50);
-	
-	lcd_wr_data(0);
- 204:	80 e0       	ldi	r24, 0x00	; 0
- 206:	0e 94 7d 00 	call	0xfa	; 0xfa <lcd_wr_data>
 						
 	lcd_write_string("Hello World!");
- 20a:	80 e0       	ldi	r24, 0x00	; 0
- 20c:	91 e0       	ldi	r25, 0x01	; 1
- 20e:	0e 94 98 00 	call	0x130	; 0x130 <lcd_write_string>
+ 204:	80 e0       	ldi	r24, 0x00	; 0
+ 206:	91 e0       	ldi	r25, 0x01	; 1
+ 208:	0e 94 98 00 	call	0x130	; 0x130 <lcd_write_string>
 	while (2) {
 		if (PINB ^ 1 << PB3) {
 			lcd_wr_cmd(0b00000001); // clear display
 			_delay_ms(5);
 			
-			lcd_write_string("dA king");
- 212:	cd e0       	ldi	r28, 0x0D	; 13
- 214:	d1 e0       	ldi	r29, 0x01	; 1
-	lcd_wr_data(0);
+			lcd_write_string("329 = ");
+ 20c:	cd e0       	ldi	r28, 0x0D	; 13
+ 20e:	d1 e0       	ldi	r29, 0x01	; 1
+	_delay_us(50);
 						
 	lcd_write_string("Hello World!");
 
 	while (2) {
 		if (PINB ^ 1 << PB3) {
- 216:	83 b1       	in	r24, 0x03	; 3
- 218:	88 30       	cpi	r24, 0x08	; 8
- 21a:	e9 f3       	breq	.-6      	; 0x216 <main+0xc8>
+ 210:	83 b1       	in	r24, 0x03	; 3
+ 212:	88 30       	cpi	r24, 0x08	; 8
+ 214:	e9 f3       	breq	.-6      	; 0x210 <main+0xc2>
 			lcd_wr_cmd(0b00000001); // clear display
- 21c:	81 e0       	ldi	r24, 0x01	; 1
- 21e:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
+ 216:	81 e0       	ldi	r24, 0x01	; 1
+ 218:	0e 94 75 00 	call	0xea	; 0xea <lcd_wr_cmd>
 	#else
 		//round up by default
 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
 	#endif
 
 	__builtin_avr_delay_cycles(__ticks_dc);
- 222:	af e1       	ldi	r26, 0x1F	; 31
- 224:	be e4       	ldi	r27, 0x4E	; 78
- 226:	11 97       	sbiw	r26, 0x01	; 1
- 228:	f1 f7       	brne	.-4      	; 0x226 <main+0xd8>
- 22a:	00 c0       	rjmp	.+0      	; 0x22c <main+0xde>
- 22c:	00 00       	nop
+ 21c:	af e1       	ldi	r26, 0x1F	; 31
+ 21e:	be e4       	ldi	r27, 0x4E	; 78
+ 220:	11 97       	sbiw	r26, 0x01	; 1
+ 222:	f1 f7       	brne	.-4      	; 0x220 <main+0xd2>
+ 224:	00 c0       	rjmp	.+0      	; 0x226 <main+0xd8>
+ 226:	00 00       	nop
 			_delay_ms(5);
 			
-			lcd_write_string("dA king");
- 22e:	ce 01       	movw	r24, r28
- 230:	0e 94 98 00 	call	0x130	; 0x130 <lcd_write_string>
- 234:	f0 cf       	rjmp	.-32     	; 0x216 <main+0xc8>
+			lcd_write_string("329 = ");
+ 228:	ce 01       	movw	r24, r28
+ 22a:	0e 94 98 00 	call	0x130	; 0x130 <lcd_write_string>
+			lcd_wr_data(1);
+ 22e:	81 e0       	ldi	r24, 0x01	; 1
+ 230:	0e 94 7d 00 	call	0xfa	; 0xfa <lcd_wr_data>
+ 234:	ed cf       	rjmp	.-38     	; 0x210 <main+0xc2>
 
 00000236 <_exit>:
  236:	f8 94       	cli
