@@ -37,7 +37,7 @@ void lcd_write_string(char* inputString) {
 int main(void) {
 	DDRD = 0xFF;
 	DDRB = 0b00000111;
-	
+	PORTB |= 1 << 3;
 	_delay_ms(40);
 
 	lcd_wr_cmd(0b00111000);
