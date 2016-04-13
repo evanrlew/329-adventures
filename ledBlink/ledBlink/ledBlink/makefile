@@ -3,8 +3,8 @@ MCU=atmega32u4
 CFLAGS=-g -Wall -mcall-prologues -mmcu=$(MCU) -Os
 LDFLAGS=-Wl,-gc-sections -Wl,-relax
 CC=avr-gcc
-TARGET=proj1_LCD
-OBJECT_FILES=proj1_LCD.o
+TARGET=ledBlink
+OBJECT_FILES=ledBlink.o
 
 all: $(TARGET).hex
 
