@@ -29,11 +29,11 @@ int main(void)
 void initTimer0(void)
 {
     TCCR1A = 0x00;                          // configure counter wave mode and compare mode
-    TCCR1B = (1<<CS11)|(1<<WGM12);          // clock prescale 1/8, wave mode
-    OCR1AH = 0x0F;                          // compare reg a = 4096
-    OCR1AL = 0xFF;
+    TCCR1B = (1<<CS11)|(1<<CS10)|(1<<WGM12);          // clock prescale 1/8, wave mode
+    OCR1AH = 0x01;                          // compare reg a = 4096
+    OCR1AL = 0xF4;
     OCR1BH = 0x00;                          // compare reg b = 256
-    OCR1BL = 0xFF;
+    OCR1BL = 0x7D;
     TIMSK1 = (1<<ICIE1)|(1<<OCIE1A)|(1<<OCIE1B); // enable interupts for a and b
     TIFR1 = 0x00;
 
