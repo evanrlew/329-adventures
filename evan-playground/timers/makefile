@@ -3,8 +3,8 @@ MCU=atmega32u4
 CFLAGS=-g -Wall -mcall-prologues -mmcu=$(MCU) -Os
 LDFLAGS=-Wl,-gc-sections -Wl,-relax
 CC=avr-gcc
-TARGET=timers
-OBJECT_FILES=timers.o
+TARGET=timers2
+OBJECT_FILES=timers2.o
 
 all: $(TARGET).hex
 

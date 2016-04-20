@@ -24,10 +24,10 @@ int main(void)
 
     while(1)
     {
-        Transmit_SPI_Master(0x55);  
+        Transmit_SPI_Master(0x11);  
         _delay_us(100);
             
-        Transmit_SPI_Master(0xAA);  
+        Transmit_SPI_Master(0x22);  
         _delay_us(100);
 
     }  // end while
@@ -37,12 +37,12 @@ int main(void)
 
 void Initialize_SPI_Master(void)
 {      
-    SPCR = (1<<SPIE) |      //No interrupts
+    SPCR = (1<<SPIE) |      // interrupts
     (1<<SPE) |              //SPI enabled
     (0<<DORD) |             //send MSB first
     (1<<MSTR) |             //master
     (0<<CPOL) |             //clock idles low   
-    (1<<CPHA) |             //sample leading edge   
+    (1<<CPHA) |             //sample falling edge   
     (0<<SPR1) | (0<<SPR0) ; //clock speed   
     SPSR = (0<<SPIF) |      //SPI interrupt flag
     (0<<WCOL) |             //Write collision flag
