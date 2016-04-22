@@ -3,29 +3,29 @@ Project2.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000000  00800100  00000356  000003ea  2**0
+  0 .data         00000082  00800100  00000476  0000050a  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         00000356  00000000  00000000  00000094  2**1
+  1 .text         00000476  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000004  00800100  00800100  000003ea  2**0
+  2 .bss          00000007  00800182  00800182  0000058c  2**0
                   ALLOC
-  3 .stab         000006cc  00000000  00000000  000003ec  2**2
+  3 .stab         000006cc  00000000  00000000  0000058c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  4 .stabstr      00000085  00000000  00000000  00000ab8  2**0
+  4 .stabstr      00000085  00000000  00000000  00000c58  2**0
                   CONTENTS, READONLY, DEBUGGING
-  5 .debug_aranges 000000e0  00000000  00000000  00000b40  2**3
+  5 .debug_aranges 000000e0  00000000  00000000  00000ce0  2**3
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   0000079f  00000000  00000000  00000c20  2**0
+  6 .debug_info   0000088f  00000000  00000000  00000dc0  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000001b9  00000000  00000000  000013bf  2**0
+  7 .debug_abbrev 000001d5  00000000  00000000  0000164f  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   0000049c  00000000  00000000  00001578  2**0
+  8 .debug_line   000004bc  00000000  00000000  00001824  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000188  00000000  00000000  00001a14  2**2
+  9 .debug_frame  00000210  00000000  00000000  00001ce0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    000001c0  00000000  00000000  00001b9c  2**0
+ 10 .debug_str    0000021d  00000000  00000000  00001ef0  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000002e0  00000000  00000000  00001d5c  2**0
+ 11 .debug_loc    000003de  00000000  00000000  0000210d  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -48,14 +48,14 @@ Disassembly of section .text:
   38:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   3c:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   40:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
-  44:	0c 94 08 01 	jmp	0x210	; 0x210 <__vector_17>
-  48:	0c 94 30 01 	jmp	0x260	; 0x260 <__vector_18>
+  44:	0c 94 2c 01 	jmp	0x258	; 0x258 <__vector_17>
+  48:	0c 94 54 01 	jmp	0x2a8	; 0x2a8 <__vector_18>
   4c:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   50:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   54:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   58:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   5c:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
-  60:	0c 94 e2 00 	jmp	0x1c4	; 0x1c4 <__vector_24>
+  60:	0c 94 06 01 	jmp	0x20c	; 0x20c <__vector_24>
   64:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   68:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   6c:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
@@ -63,7 +63,7 @@ Disassembly of section .text:
   74:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   78:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   7c:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
-  80:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
+  80:	0c 94 7c 01 	jmp	0x2f8	; 0x2f8 <__vector_32>
   84:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   88:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
   8c:	0c 94 73 00 	jmp	0xe6	; 0xe6 <__bad_interrupt>
@@ -87,18 +87,18 @@ Disassembly of section .text:
   b8:	11 e0       	ldi	r17, 0x01	; 1
   ba:	a0 e0       	ldi	r26, 0x00	; 0
   bc:	b1 e0       	ldi	r27, 0x01	; 1
-  be:	e6 e5       	ldi	r30, 0x56	; 86
-  c0:	f3 e0       	ldi	r31, 0x03	; 3
+  be:	e6 e7       	ldi	r30, 0x76	; 118
+  c0:	f4 e0       	ldi	r31, 0x04	; 4
   c2:	02 c0       	rjmp	.+4      	; 0xc8 <__do_copy_data+0x10>
   c4:	05 90       	lpm	r0, Z+
   c6:	0d 92       	st	X+, r0
-  c8:	a0 30       	cpi	r26, 0x00	; 0
+  c8:	a2 38       	cpi	r26, 0x82	; 130
   ca:	b1 07       	cpc	r27, r17
   cc:	d9 f7       	brne	.-10     	; 0xc4 <__do_copy_data+0xc>
 
 000000ce <__do_clear_bss>:
   ce:	11 e0       	ldi	r17, 0x01	; 1
-  d0:	a0 e0       	ldi	r26, 0x00	; 0
+  d0:	a2 e8       	ldi	r26, 0x82	; 130
   d2:	b1 e0       	ldi	r27, 0x01	; 1
   d4:	01 c0       	rjmp	.+2      	; 0xd8 <.do_clear_bss_start>
 
@@ -106,11 +106,11 @@ Disassembly of section .text:
   d6:	1d 92       	st	X+, r1
 
 000000d8 <.do_clear_bss_start>:
-  d8:	a4 30       	cpi	r26, 0x04	; 4
+  d8:	a9 38       	cpi	r26, 0x89	; 137
   da:	b1 07       	cpc	r27, r17
   dc:	e1 f7       	brne	.-8      	; 0xd6 <.do_clear_bss_loop>
-  de:	0e 94 b9 00 	call	0x172	; 0x172 <main>
-  e2:	0c 94 a9 01 	jmp	0x352	; 0x352 <_exit>
+  de:	0e 94 df 00 	call	0x1be	; 0x1be <main>
+  e2:	0c 94 39 02 	jmp	0x472	; 0x472 <_exit>
 
 000000e6 <__bad_interrupt>:
   e6:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -132,7 +132,7 @@ void initTimer1(void)
 	OCR1AL = 0xF4;
   fa:	84 ef       	ldi	r24, 0xF4	; 244
   fc:	80 93 88 00 	sts	0x0088, r24
-	OCR1BH = 0x00;                          // compare reg b = 256
+	OCR1BH = 0x00;                          // compare reg b = 125
  100:	10 92 8b 00 	sts	0x008B, r1
 	OCR1BL = 0x7D;
  104:	8d e7       	ldi	r24, 0x7D	; 125
@@ -142,391 +142,565 @@ void initTimer1(void)
  10c:	80 93 6f 00 	sts	0x006F, r24
 	TIFR1 = 0x00;
  110:	16 ba       	out	0x16, r1	; 22
-
 }
  112:	08 95       	ret
 
-00000114 <set_pulse>:
+00000114 <initTimer3>:
+
+void initTimer3(void)
+{
+	TCCR3A = 0x00;                          // configure counter wave mode and compare mode
+ 114:	10 92 90 00 	sts	0x0090, r1
+	TCCR3B = (1<<CS30)|(1<<WGM32);          // clock no prescale, wave mode
+ 118:	89 e0       	ldi	r24, 0x09	; 9
+ 11a:	80 93 91 00 	sts	0x0091, r24
+	TIMSK3 = (1<<ICIE3)|(1<<OCIE3A); // enable interupts for a and b
+ 11e:	82 e2       	ldi	r24, 0x22	; 34
+ 120:	80 93 71 00 	sts	0x0071, r24
+	TIFR3 = 0x00;
+ 124:	18 ba       	out	0x18, r1	; 24
+}
+ 126:	08 95       	ret
+
+00000128 <set_pulse>:
 
 void set_pulse(uint16_t duty, uint16_t freq) {
- 114:	cf 93       	push	r28
- 116:	df 93       	push	r29
- 118:	ec 01       	movw	r28, r24
+ 128:	cf 93       	push	r28
+ 12a:	df 93       	push	r29
+ 12c:	ec 01       	movw	r28, r24
 	uint16_t ticks_per_period = F_CPU / TIMER1_PRESCALE / freq;
- 11a:	9b 01       	movw	r18, r22
- 11c:	40 e0       	ldi	r20, 0x00	; 0
- 11e:	50 e0       	ldi	r21, 0x00	; 0
- 120:	60 e9       	ldi	r22, 0x90	; 144
- 122:	70 ed       	ldi	r23, 0xD0	; 208
- 124:	83 e0       	ldi	r24, 0x03	; 3
- 126:	90 e0       	ldi	r25, 0x00	; 0
- 128:	0e 94 6c 01 	call	0x2d8	; 0x2d8 <__divmodsi4>
+ 12e:	9b 01       	movw	r18, r22
+ 130:	40 e0       	ldi	r20, 0x00	; 0
+ 132:	50 e0       	ldi	r21, 0x00	; 0
+ 134:	60 e9       	ldi	r22, 0x90	; 144
+ 136:	70 ed       	ldi	r23, 0xD0	; 208
+ 138:	83 e0       	ldi	r24, 0x03	; 3
+ 13a:	90 e0       	ldi	r25, 0x00	; 0
+ 13c:	0e 94 fc 01 	call	0x3f8	; 0x3f8 <__divmodsi4>
 	uint16_t ticks_per_duty = ticks_per_period * duty / 100;
- 12c:	2c 9f       	mul	r18, r28
- 12e:	c0 01       	movw	r24, r0
- 130:	2d 9f       	mul	r18, r29
- 132:	90 0d       	add	r25, r0
- 134:	3c 9f       	mul	r19, r28
- 136:	90 0d       	add	r25, r0
- 138:	11 24       	eor	r1, r1
- 13a:	64 e6       	ldi	r22, 0x64	; 100
- 13c:	70 e0       	ldi	r23, 0x00	; 0
- 13e:	0e 94 58 01 	call	0x2b0	; 0x2b0 <__udivmodhi4>
+ 140:	2c 9f       	mul	r18, r28
+ 142:	c0 01       	movw	r24, r0
+ 144:	2d 9f       	mul	r18, r29
+ 146:	90 0d       	add	r25, r0
+ 148:	3c 9f       	mul	r19, r28
+ 14a:	90 0d       	add	r25, r0
+ 14c:	11 24       	eor	r1, r1
+ 14e:	64 e6       	ldi	r22, 0x64	; 100
+ 150:	70 e0       	ldi	r23, 0x00	; 0
+ 152:	0e 94 e8 01 	call	0x3d0	; 0x3d0 <__udivmodhi4>
 	
 	// calculate and set frequency
 	OCR1AH = ticks_per_period >> 8;                          // compare reg a
- 142:	30 93 89 00 	sts	0x0089, r19
+ 156:	30 93 89 00 	sts	0x0089, r19
 	OCR1AL = ticks_per_period & 0xFF;
- 146:	20 93 88 00 	sts	0x0088, r18
+ 15a:	20 93 88 00 	sts	0x0088, r18
 	
 	// calculate and set duty
 	OCR1BH = ticks_per_duty >> 8;                          // compare reg b
- 14a:	70 93 8b 00 	sts	0x008B, r23
+ 15e:	70 93 8b 00 	sts	0x008B, r23
 	OCR1BL = ticks_per_duty & 0xFF;
- 14e:	60 93 8a 00 	sts	0x008A, r22
+ 162:	60 93 8a 00 	sts	0x008A, r22
 }
- 152:	df 91       	pop	r29
- 154:	cf 91       	pop	r28
- 156:	08 95       	ret
+ 166:	df 91       	pop	r29
+ 168:	cf 91       	pop	r28
+ 16a:	08 95       	ret
 
-00000158 <set_DAC_data>:
+0000016c <set_saw_freq>:
 
-void set_DAC_data(int data) {
-	SPI_MSB = (data >> 8 & 0xF) | 0x70;
- 158:	9f 70       	andi	r25, 0x0F	; 15
- 15a:	90 67       	ori	r25, 0x70	; 112
- 15c:	90 93 02 01 	sts	0x0102, r25
-	SPI_LSB = data & 0xFF;
- 160:	80 93 01 01 	sts	0x0101, r24
+void set_saw_freq(uint16_t freq) {
+	uint16_t ticks_per_step = F_CPU / freq / NUM_SAW_POINTS;
+ 16c:	9c 01       	movw	r18, r24
+ 16e:	40 e0       	ldi	r20, 0x00	; 0
+ 170:	50 e0       	ldi	r21, 0x00	; 0
+ 172:	60 e9       	ldi	r22, 0x90	; 144
+ 174:	70 ed       	ldi	r23, 0xD0	; 208
+ 176:	83 e0       	ldi	r24, 0x03	; 3
+ 178:	90 e0       	ldi	r25, 0x00	; 0
+ 17a:	0e 94 fc 01 	call	0x3f8	; 0x3f8 <__divmodsi4>
+	
+	OCR3AH = ticks_per_step >> 8;
+ 17e:	30 93 99 00 	sts	0x0099, r19
+	OCR3AL = ticks_per_step & 0xFF;
+ 182:	20 93 98 00 	sts	0x0098, r18
 }
- 164:	08 95       	ret
+ 186:	08 95       	ret
 
-00000166 <Initialize_SPI_Master>:
+00000188 <set_sine_freq>:
+
+void set_sine_freq(uint16_t freq) {
+	uint16_t ticks_per_step = F_CPU / freq / NUM_SINE_POINTS;
+ 188:	9c 01       	movw	r18, r24
+ 18a:	40 e0       	ldi	r20, 0x00	; 0
+ 18c:	50 e0       	ldi	r21, 0x00	; 0
+ 18e:	60 e9       	ldi	r22, 0x90	; 144
+ 190:	70 ed       	ldi	r23, 0xD0	; 208
+ 192:	83 e0       	ldi	r24, 0x03	; 3
+ 194:	90 e0       	ldi	r25, 0x00	; 0
+ 196:	0e 94 fc 01 	call	0x3f8	; 0x3f8 <__divmodsi4>
+	
+	OCR3AH = ticks_per_step >> 8;
+ 19a:	30 93 99 00 	sts	0x0099, r19
+	OCR3AL = ticks_per_step & 0xFF;
+ 19e:	20 93 98 00 	sts	0x0098, r18
+}
+ 1a2:	08 95       	ret
+
+000001a4 <set_DAC_data>:
+
+void set_DAC_data(uint16_t data) {
+	spi_msb = (data >> 8 & 0xF) | 0x70;
+ 1a4:	9f 70       	andi	r25, 0x0F	; 15
+ 1a6:	90 67       	ori	r25, 0x70	; 112
+ 1a8:	90 93 83 01 	sts	0x0183, r25
+	spi_lsb = data & 0xFF;
+ 1ac:	80 93 82 01 	sts	0x0182, r24
+}
+ 1b0:	08 95       	ret
+
+000001b2 <Initialize_SPI_Master>:
 
 void Initialize_SPI_Master(void)
 {
 	SPCR = (1<<SPIE) | 		//No interrupts
- 166:	80 ed       	ldi	r24, 0xD0	; 208
- 168:	8c bd       	out	0x2c, r24	; 44
+ 1b2:	80 ed       	ldi	r24, 0xD0	; 208
+ 1b4:	8c bd       	out	0x2c, r24	; 44
 	(1<<MSTR) | 			//master
 	(0<<CPOL) | 			//clock idles low
 	(0<<CPHA) | 			//sample falling clock edge
 	(0<<SPR1) | (0<<SPR0) ; //clock speed
 	
 	SPSR = (0<<SPIF) | 		//SPI interrupt flag
- 16a:	1d bc       	out	0x2d, r1	; 45
+ 1b6:	81 e0       	ldi	r24, 0x01	; 1
+ 1b8:	8d bd       	out	0x2d, r24	; 45
 	(0<<WCOL) | 			//Write collision flag
-	(0<<SPI2X) ; 			//Doubles SPI clock
+	(1<<SPI2X) ; 			//Doubles SPI clock
 	PORTB = 1 << SS;  		// make sure SS is high
- 16c:	81 e0       	ldi	r24, 0x01	; 1
- 16e:	85 b9       	out	0x05, r24	; 5
+ 1ba:	85 b9       	out	0x05, r24	; 5
 }
- 170:	08 95       	ret
+ 1bc:	08 95       	ret
 
-00000172 <main>:
-{
-	int count = 0;
-	int val = 0;
-	int incr = 0x100 / 16;
+000001be <main>:
+{	
+	//initTimer1();
+	//TCCR1B = 0; // turn off to test ramp 
+	//TIMSK1 = 0;
 	
-	initTimer1();
- 172:	0e 94 75 00 	call	0xea	; 0xea <initTimer1>
+	initTimer3(); // timer for sine/sawtooth
+ 1be:	0e 94 8a 00 	call	0x114	; 0x114 <initTimer3>
 	sei();
- 176:	78 94       	sei
+ 1c2:	78 94       	sei
 	
 	DDRB = 1<<MOSI | 1<<SCK | 1<<SS;	// make MOSI, SCK and SS outputs
- 178:	87 e0       	ldi	r24, 0x07	; 7
- 17a:	84 b9       	out	0x04, r24	; 4
+ 1c4:	87 e0       	ldi	r24, 0x07	; 7
+ 1c6:	84 b9       	out	0x04, r24	; 4
 	Initialize_SPI_Master();
- 17c:	0e 94 b3 00 	call	0x166	; 0x166 <Initialize_SPI_Master>
+ 1c8:	0e 94 d9 00 	call	0x1b2	; 0x1b2 <Initialize_SPI_Master>
 	
-	set_pulse(23, 500);
- 180:	87 e1       	ldi	r24, 0x17	; 23
- 182:	90 e0       	ldi	r25, 0x00	; 0
- 184:	64 ef       	ldi	r22, 0xF4	; 244
- 186:	71 e0       	ldi	r23, 0x01	; 1
- 188:	0e 94 8a 00 	call	0x114	; 0x114 <set_pulse>
- 18c:	ff cf       	rjmp	.-2      	; 0x18c <main+0x1a>
+	//set_pulse(23, 500);
+	set_saw_freq(433);
+ 1cc:	81 eb       	ldi	r24, 0xB1	; 177
+ 1ce:	91 e0       	ldi	r25, 0x01	; 1
+ 1d0:	0e 94 b6 00 	call	0x16c	; 0x16c <set_saw_freq>
+ 1d4:	ff cf       	rjmp	.-2      	; 0x1d4 <main+0x16>
 
-0000018e <Transmit_SPI_Master>:
+000001d6 <Transmit_SPI_Master>:
 	PORTB = 1 << SS;  		// make sure SS is high
 }
 
 void Transmit_SPI_Master(void) {
 	
-	if (SPI_STATE == XFER_FINISHED) {
- 18e:	80 91 03 01 	lds	r24, 0x0103
- 192:	88 23       	and	r24, r24
- 194:	41 f4       	brne	.+16     	; 0x1a6 <Transmit_SPI_Master+0x18>
-		SPI_STATE = MSB_SENT;
- 196:	81 e0       	ldi	r24, 0x01	; 1
- 198:	80 93 03 01 	sts	0x0103, r24
+	if (spi_state == XFER_FINISHED) {
+ 1d6:	80 91 84 01 	lds	r24, 0x0184
+ 1da:	88 23       	and	r24, r24
+ 1dc:	41 f4       	brne	.+16     	; 0x1ee <Transmit_SPI_Master+0x18>
+		spi_state = MSB_SENT;
+ 1de:	81 e0       	ldi	r24, 0x01	; 1
+ 1e0:	80 93 84 01 	sts	0x0184, r24
 		PORTB &= ~(1 << SS); 		  //Assert slave select (active low) 		
- 19c:	28 98       	cbi	0x05, 0	; 5
-		SPDR = SPI_MSB;
- 19e:	80 91 02 01 	lds	r24, 0x0102
- 1a2:	8e bd       	out	0x2e, r24	; 46
- 1a4:	08 95       	ret
+ 1e4:	28 98       	cbi	0x05, 0	; 5
+		SPDR = spi_msb;
+ 1e6:	80 91 83 01 	lds	r24, 0x0183
+ 1ea:	8e bd       	out	0x2e, r24	; 46
+ 1ec:	08 95       	ret
 	}
-	else if (SPI_STATE == MSB_SENT) {
- 1a6:	80 91 03 01 	lds	r24, 0x0103
- 1aa:	81 30       	cpi	r24, 0x01	; 1
- 1ac:	39 f4       	brne	.+14     	; 0x1bc <Transmit_SPI_Master+0x2e>
-		SPI_STATE = LSB_SENT;
- 1ae:	82 e0       	ldi	r24, 0x02	; 2
- 1b0:	80 93 03 01 	sts	0x0103, r24
-		SPDR = SPI_LSB;
- 1b4:	80 91 01 01 	lds	r24, 0x0101
- 1b8:	8e bd       	out	0x2e, r24	; 46
- 1ba:	08 95       	ret
+	else if (spi_state == MSB_SENT) {
+ 1ee:	80 91 84 01 	lds	r24, 0x0184
+ 1f2:	81 30       	cpi	r24, 0x01	; 1
+ 1f4:	39 f4       	brne	.+14     	; 0x204 <Transmit_SPI_Master+0x2e>
+		spi_state = LSB_SENT;
+ 1f6:	82 e0       	ldi	r24, 0x02	; 2
+ 1f8:	80 93 84 01 	sts	0x0184, r24
+		SPDR = spi_lsb;
+ 1fc:	80 91 82 01 	lds	r24, 0x0182
+ 200:	8e bd       	out	0x2e, r24	; 46
+ 202:	08 95       	ret
 	}
 	else {
-		SPI_STATE = XFER_FINISHED;
- 1bc:	10 92 03 01 	sts	0x0103, r1
+		spi_state = XFER_FINISHED;
+ 204:	10 92 84 01 	sts	0x0184, r1
 		PORTB |= 1 << SS;
- 1c0:	28 9a       	sbi	0x05, 0	; 5
- 1c2:	08 95       	ret
+ 208:	28 9a       	sbi	0x05, 0	; 5
+ 20a:	08 95       	ret
 
-000001c4 <__vector_24>:
+0000020c <__vector_24>:
 	}
 }
 
 ISR(SPI_STC_vect) {
- 1c4:	1f 92       	push	r1
- 1c6:	0f 92       	push	r0
- 1c8:	0f b6       	in	r0, 0x3f	; 63
- 1ca:	0f 92       	push	r0
- 1cc:	11 24       	eor	r1, r1
- 1ce:	2f 93       	push	r18
- 1d0:	3f 93       	push	r19
- 1d2:	4f 93       	push	r20
- 1d4:	5f 93       	push	r21
- 1d6:	6f 93       	push	r22
- 1d8:	7f 93       	push	r23
- 1da:	8f 93       	push	r24
- 1dc:	9f 93       	push	r25
- 1de:	af 93       	push	r26
- 1e0:	bf 93       	push	r27
- 1e2:	ef 93       	push	r30
- 1e4:	ff 93       	push	r31
+ 20c:	1f 92       	push	r1
+ 20e:	0f 92       	push	r0
+ 210:	0f b6       	in	r0, 0x3f	; 63
+ 212:	0f 92       	push	r0
+ 214:	11 24       	eor	r1, r1
+ 216:	2f 93       	push	r18
+ 218:	3f 93       	push	r19
+ 21a:	4f 93       	push	r20
+ 21c:	5f 93       	push	r21
+ 21e:	6f 93       	push	r22
+ 220:	7f 93       	push	r23
+ 222:	8f 93       	push	r24
+ 224:	9f 93       	push	r25
+ 226:	af 93       	push	r26
+ 228:	bf 93       	push	r27
+ 22a:	ef 93       	push	r30
+ 22c:	ff 93       	push	r31
 	cli();
- 1e6:	f8 94       	cli
+ 22e:	f8 94       	cli
 	Transmit_SPI_Master();
- 1e8:	0e 94 c7 00 	call	0x18e	; 0x18e <Transmit_SPI_Master>
+ 230:	0e 94 eb 00 	call	0x1d6	; 0x1d6 <Transmit_SPI_Master>
 	sei();
- 1ec:	78 94       	sei
+ 234:	78 94       	sei
 }
- 1ee:	ff 91       	pop	r31
- 1f0:	ef 91       	pop	r30
- 1f2:	bf 91       	pop	r27
- 1f4:	af 91       	pop	r26
- 1f6:	9f 91       	pop	r25
- 1f8:	8f 91       	pop	r24
- 1fa:	7f 91       	pop	r23
- 1fc:	6f 91       	pop	r22
- 1fe:	5f 91       	pop	r21
- 200:	4f 91       	pop	r20
- 202:	3f 91       	pop	r19
- 204:	2f 91       	pop	r18
- 206:	0f 90       	pop	r0
- 208:	0f be       	out	0x3f, r0	; 63
- 20a:	0f 90       	pop	r0
- 20c:	1f 90       	pop	r1
- 20e:	18 95       	reti
+ 236:	ff 91       	pop	r31
+ 238:	ef 91       	pop	r30
+ 23a:	bf 91       	pop	r27
+ 23c:	af 91       	pop	r26
+ 23e:	9f 91       	pop	r25
+ 240:	8f 91       	pop	r24
+ 242:	7f 91       	pop	r23
+ 244:	6f 91       	pop	r22
+ 246:	5f 91       	pop	r21
+ 248:	4f 91       	pop	r20
+ 24a:	3f 91       	pop	r19
+ 24c:	2f 91       	pop	r18
+ 24e:	0f 90       	pop	r0
+ 250:	0f be       	out	0x3f, r0	; 63
+ 252:	0f 90       	pop	r0
+ 254:	1f 90       	pop	r1
+ 256:	18 95       	reti
 
-00000210 <__vector_17>:
+00000258 <__vector_17>:
 
 ISR(TIMER1_COMPA_vect) {
- 210:	1f 92       	push	r1
- 212:	0f 92       	push	r0
- 214:	0f b6       	in	r0, 0x3f	; 63
- 216:	0f 92       	push	r0
- 218:	11 24       	eor	r1, r1
- 21a:	2f 93       	push	r18
- 21c:	3f 93       	push	r19
- 21e:	4f 93       	push	r20
- 220:	5f 93       	push	r21
- 222:	6f 93       	push	r22
- 224:	7f 93       	push	r23
- 226:	8f 93       	push	r24
- 228:	9f 93       	push	r25
- 22a:	af 93       	push	r26
- 22c:	bf 93       	push	r27
- 22e:	ef 93       	push	r30
- 230:	ff 93       	push	r31
+ 258:	1f 92       	push	r1
+ 25a:	0f 92       	push	r0
+ 25c:	0f b6       	in	r0, 0x3f	; 63
+ 25e:	0f 92       	push	r0
+ 260:	11 24       	eor	r1, r1
+ 262:	2f 93       	push	r18
+ 264:	3f 93       	push	r19
+ 266:	4f 93       	push	r20
+ 268:	5f 93       	push	r21
+ 26a:	6f 93       	push	r22
+ 26c:	7f 93       	push	r23
+ 26e:	8f 93       	push	r24
+ 270:	9f 93       	push	r25
+ 272:	af 93       	push	r26
+ 274:	bf 93       	push	r27
+ 276:	ef 93       	push	r30
+ 278:	ff 93       	push	r31
 	set_DAC_data(0xFFF);
- 232:	8f ef       	ldi	r24, 0xFF	; 255
- 234:	9f e0       	ldi	r25, 0x0F	; 15
- 236:	0e 94 ac 00 	call	0x158	; 0x158 <set_DAC_data>
+ 27a:	8f ef       	ldi	r24, 0xFF	; 255
+ 27c:	9f e0       	ldi	r25, 0x0F	; 15
+ 27e:	0e 94 d2 00 	call	0x1a4	; 0x1a4 <set_DAC_data>
 	Transmit_SPI_Master();
- 23a:	0e 94 c7 00 	call	0x18e	; 0x18e <Transmit_SPI_Master>
+ 282:	0e 94 eb 00 	call	0x1d6	; 0x1d6 <Transmit_SPI_Master>
 }
- 23e:	ff 91       	pop	r31
- 240:	ef 91       	pop	r30
- 242:	bf 91       	pop	r27
- 244:	af 91       	pop	r26
- 246:	9f 91       	pop	r25
- 248:	8f 91       	pop	r24
- 24a:	7f 91       	pop	r23
- 24c:	6f 91       	pop	r22
- 24e:	5f 91       	pop	r21
- 250:	4f 91       	pop	r20
- 252:	3f 91       	pop	r19
- 254:	2f 91       	pop	r18
- 256:	0f 90       	pop	r0
- 258:	0f be       	out	0x3f, r0	; 63
- 25a:	0f 90       	pop	r0
- 25c:	1f 90       	pop	r1
- 25e:	18 95       	reti
+ 286:	ff 91       	pop	r31
+ 288:	ef 91       	pop	r30
+ 28a:	bf 91       	pop	r27
+ 28c:	af 91       	pop	r26
+ 28e:	9f 91       	pop	r25
+ 290:	8f 91       	pop	r24
+ 292:	7f 91       	pop	r23
+ 294:	6f 91       	pop	r22
+ 296:	5f 91       	pop	r21
+ 298:	4f 91       	pop	r20
+ 29a:	3f 91       	pop	r19
+ 29c:	2f 91       	pop	r18
+ 29e:	0f 90       	pop	r0
+ 2a0:	0f be       	out	0x3f, r0	; 63
+ 2a2:	0f 90       	pop	r0
+ 2a4:	1f 90       	pop	r1
+ 2a6:	18 95       	reti
 
-00000260 <__vector_18>:
+000002a8 <__vector_18>:
 
 ISR(TIMER1_COMPB_vect) {
- 260:	1f 92       	push	r1
- 262:	0f 92       	push	r0
- 264:	0f b6       	in	r0, 0x3f	; 63
- 266:	0f 92       	push	r0
- 268:	11 24       	eor	r1, r1
- 26a:	2f 93       	push	r18
- 26c:	3f 93       	push	r19
- 26e:	4f 93       	push	r20
- 270:	5f 93       	push	r21
- 272:	6f 93       	push	r22
- 274:	7f 93       	push	r23
- 276:	8f 93       	push	r24
- 278:	9f 93       	push	r25
- 27a:	af 93       	push	r26
- 27c:	bf 93       	push	r27
- 27e:	ef 93       	push	r30
- 280:	ff 93       	push	r31
+ 2a8:	1f 92       	push	r1
+ 2aa:	0f 92       	push	r0
+ 2ac:	0f b6       	in	r0, 0x3f	; 63
+ 2ae:	0f 92       	push	r0
+ 2b0:	11 24       	eor	r1, r1
+ 2b2:	2f 93       	push	r18
+ 2b4:	3f 93       	push	r19
+ 2b6:	4f 93       	push	r20
+ 2b8:	5f 93       	push	r21
+ 2ba:	6f 93       	push	r22
+ 2bc:	7f 93       	push	r23
+ 2be:	8f 93       	push	r24
+ 2c0:	9f 93       	push	r25
+ 2c2:	af 93       	push	r26
+ 2c4:	bf 93       	push	r27
+ 2c6:	ef 93       	push	r30
+ 2c8:	ff 93       	push	r31
 	set_DAC_data(0);
- 282:	80 e0       	ldi	r24, 0x00	; 0
- 284:	90 e0       	ldi	r25, 0x00	; 0
- 286:	0e 94 ac 00 	call	0x158	; 0x158 <set_DAC_data>
+ 2ca:	80 e0       	ldi	r24, 0x00	; 0
+ 2cc:	90 e0       	ldi	r25, 0x00	; 0
+ 2ce:	0e 94 d2 00 	call	0x1a4	; 0x1a4 <set_DAC_data>
 	Transmit_SPI_Master();
- 28a:	0e 94 c7 00 	call	0x18e	; 0x18e <Transmit_SPI_Master>
+ 2d2:	0e 94 eb 00 	call	0x1d6	; 0x1d6 <Transmit_SPI_Master>
 }
- 28e:	ff 91       	pop	r31
- 290:	ef 91       	pop	r30
- 292:	bf 91       	pop	r27
- 294:	af 91       	pop	r26
- 296:	9f 91       	pop	r25
- 298:	8f 91       	pop	r24
- 29a:	7f 91       	pop	r23
- 29c:	6f 91       	pop	r22
- 29e:	5f 91       	pop	r21
- 2a0:	4f 91       	pop	r20
- 2a2:	3f 91       	pop	r19
- 2a4:	2f 91       	pop	r18
- 2a6:	0f 90       	pop	r0
- 2a8:	0f be       	out	0x3f, r0	; 63
- 2aa:	0f 90       	pop	r0
- 2ac:	1f 90       	pop	r1
- 2ae:	18 95       	reti
+ 2d6:	ff 91       	pop	r31
+ 2d8:	ef 91       	pop	r30
+ 2da:	bf 91       	pop	r27
+ 2dc:	af 91       	pop	r26
+ 2de:	9f 91       	pop	r25
+ 2e0:	8f 91       	pop	r24
+ 2e2:	7f 91       	pop	r23
+ 2e4:	6f 91       	pop	r22
+ 2e6:	5f 91       	pop	r21
+ 2e8:	4f 91       	pop	r20
+ 2ea:	3f 91       	pop	r19
+ 2ec:	2f 91       	pop	r18
+ 2ee:	0f 90       	pop	r0
+ 2f0:	0f be       	out	0x3f, r0	; 63
+ 2f2:	0f 90       	pop	r0
+ 2f4:	1f 90       	pop	r1
+ 2f6:	18 95       	reti
 
-000002b0 <__udivmodhi4>:
- 2b0:	aa 1b       	sub	r26, r26
- 2b2:	bb 1b       	sub	r27, r27
- 2b4:	51 e1       	ldi	r21, 0x11	; 17
- 2b6:	07 c0       	rjmp	.+14     	; 0x2c6 <__udivmodhi4_ep>
+000002f8 <__vector_32>:
 
-000002b8 <__udivmodhi4_loop>:
- 2b8:	aa 1f       	adc	r26, r26
- 2ba:	bb 1f       	adc	r27, r27
- 2bc:	a6 17       	cp	r26, r22
- 2be:	b7 07       	cpc	r27, r23
- 2c0:	10 f0       	brcs	.+4      	; 0x2c6 <__udivmodhi4_ep>
- 2c2:	a6 1b       	sub	r26, r22
- 2c4:	b7 0b       	sbc	r27, r23
+ISR(TIMER3_COMPA_vect) {
+ 2f8:	1f 92       	push	r1
+ 2fa:	0f 92       	push	r0
+ 2fc:	0f b6       	in	r0, 0x3f	; 63
+ 2fe:	0f 92       	push	r0
+ 300:	11 24       	eor	r1, r1
+ 302:	2f 93       	push	r18
+ 304:	3f 93       	push	r19
+ 306:	4f 93       	push	r20
+ 308:	5f 93       	push	r21
+ 30a:	6f 93       	push	r22
+ 30c:	7f 93       	push	r23
+ 30e:	8f 93       	push	r24
+ 310:	9f 93       	push	r25
+ 312:	af 93       	push	r26
+ 314:	bf 93       	push	r27
+ 316:	ef 93       	push	r30
+ 318:	ff 93       	push	r31
+	uint16_t dac_val;
+	
+	if (fg_state == SAWTOOTH) {	
+ 31a:	20 91 00 01 	lds	r18, 0x0100
+ 31e:	21 30       	cpi	r18, 0x01	; 1
+ 320:	11 f5       	brne	.+68     	; 0x366 <__vector_32+0x6e>
+		static uint16_t saw_val = 0;
+		
+		if (saw_val == 0xFFF)
+ 322:	80 91 85 01 	lds	r24, 0x0185
+ 326:	90 91 86 01 	lds	r25, 0x0186
+ 32a:	2f e0       	ldi	r18, 0x0F	; 15
+ 32c:	8f 3f       	cpi	r24, 0xFF	; 255
+ 32e:	92 07       	cpc	r25, r18
+ 330:	29 f4       	brne	.+10     	; 0x33c <__vector_32+0x44>
+			saw_val = 0;
+ 332:	10 92 86 01 	sts	0x0186, r1
+ 336:	10 92 85 01 	sts	0x0185, r1
+ 33a:	10 c0       	rjmp	.+32     	; 0x35c <__vector_32+0x64>
+		else
+			saw_val += 4096 / NUM_SAW_POINTS;
+ 33c:	80 5c       	subi	r24, 0xC0	; 192
+ 33e:	9f 4f       	sbci	r25, 0xFF	; 255
+ 340:	90 93 86 01 	sts	0x0186, r25
+ 344:	80 93 85 01 	sts	0x0185, r24
+	
+		if (saw_val >= 0x1000) // dac can only take in 0xFFF and lower
+ 348:	20 e1       	ldi	r18, 0x10	; 16
+ 34a:	80 30       	cpi	r24, 0x00	; 0
+ 34c:	92 07       	cpc	r25, r18
+ 34e:	30 f0       	brcs	.+12     	; 0x35c <__vector_32+0x64>
+			saw_val = 0xFFF;
+ 350:	8f ef       	ldi	r24, 0xFF	; 255
+ 352:	9f e0       	ldi	r25, 0x0F	; 15
+ 354:	90 93 86 01 	sts	0x0186, r25
+ 358:	80 93 85 01 	sts	0x0185, r24
+		
+		dac_val = saw_val;
+ 35c:	80 91 85 01 	lds	r24, 0x0185
+ 360:	90 91 86 01 	lds	r25, 0x0186
+ 364:	20 c0       	rjmp	.+64     	; 0x3a6 <__vector_32+0xae>
+	}
+	else if (fg_state == SINE) {
+ 366:	20 91 00 01 	lds	r18, 0x0100
+ 36a:	22 30       	cpi	r18, 0x02	; 2
+ 36c:	e1 f4       	brne	.+56     	; 0x3a6 <__vector_32+0xae>
+		static uint16_t sine_cnt = 0;
+		
+		if (sine_cnt == NUM_SINE_POINTS) {
+ 36e:	80 91 87 01 	lds	r24, 0x0187
+ 372:	90 91 88 01 	lds	r25, 0x0188
+ 376:	80 34       	cpi	r24, 0x40	; 64
+ 378:	91 05       	cpc	r25, r1
+ 37a:	21 f4       	brne	.+8      	; 0x384 <__vector_32+0x8c>
+			sine_cnt = 0;
+ 37c:	10 92 88 01 	sts	0x0188, r1
+ 380:	10 92 87 01 	sts	0x0187, r1
+		}			
+		
+		dac_val = SINE_VALS[sine_cnt];
+ 384:	20 91 87 01 	lds	r18, 0x0187
+ 388:	30 91 88 01 	lds	r19, 0x0188
+ 38c:	f9 01       	movw	r30, r18
+ 38e:	ee 0f       	add	r30, r30
+ 390:	ff 1f       	adc	r31, r31
+ 392:	ef 5f       	subi	r30, 0xFF	; 255
+ 394:	fe 4f       	sbci	r31, 0xFE	; 254
+ 396:	80 81       	ld	r24, Z
+ 398:	91 81       	ldd	r25, Z+1	; 0x01
+		sine_cnt ++;
+ 39a:	2f 5f       	subi	r18, 0xFF	; 255
+ 39c:	3f 4f       	sbci	r19, 0xFF	; 255
+ 39e:	30 93 88 01 	sts	0x0188, r19
+ 3a2:	20 93 87 01 	sts	0x0187, r18
+	}		
+				
+	set_DAC_data(dac_val);
+ 3a6:	0e 94 d2 00 	call	0x1a4	; 0x1a4 <set_DAC_data>
+	Transmit_SPI_Master();
+ 3aa:	0e 94 eb 00 	call	0x1d6	; 0x1d6 <Transmit_SPI_Master>
+}
+ 3ae:	ff 91       	pop	r31
+ 3b0:	ef 91       	pop	r30
+ 3b2:	bf 91       	pop	r27
+ 3b4:	af 91       	pop	r26
+ 3b6:	9f 91       	pop	r25
+ 3b8:	8f 91       	pop	r24
+ 3ba:	7f 91       	pop	r23
+ 3bc:	6f 91       	pop	r22
+ 3be:	5f 91       	pop	r21
+ 3c0:	4f 91       	pop	r20
+ 3c2:	3f 91       	pop	r19
+ 3c4:	2f 91       	pop	r18
+ 3c6:	0f 90       	pop	r0
+ 3c8:	0f be       	out	0x3f, r0	; 63
+ 3ca:	0f 90       	pop	r0
+ 3cc:	1f 90       	pop	r1
+ 3ce:	18 95       	reti
 
-000002c6 <__udivmodhi4_ep>:
- 2c6:	88 1f       	adc	r24, r24
- 2c8:	99 1f       	adc	r25, r25
- 2ca:	5a 95       	dec	r21
- 2cc:	a9 f7       	brne	.-22     	; 0x2b8 <__udivmodhi4_loop>
- 2ce:	80 95       	com	r24
- 2d0:	90 95       	com	r25
- 2d2:	bc 01       	movw	r22, r24
- 2d4:	cd 01       	movw	r24, r26
- 2d6:	08 95       	ret
+000003d0 <__udivmodhi4>:
+ 3d0:	aa 1b       	sub	r26, r26
+ 3d2:	bb 1b       	sub	r27, r27
+ 3d4:	51 e1       	ldi	r21, 0x11	; 17
+ 3d6:	07 c0       	rjmp	.+14     	; 0x3e6 <__udivmodhi4_ep>
 
-000002d8 <__divmodsi4>:
- 2d8:	97 fb       	bst	r25, 7
- 2da:	09 2e       	mov	r0, r25
- 2dc:	05 26       	eor	r0, r21
- 2de:	0e d0       	rcall	.+28     	; 0x2fc <__divmodsi4_neg1>
- 2e0:	57 fd       	sbrc	r21, 7
- 2e2:	04 d0       	rcall	.+8      	; 0x2ec <__divmodsi4_neg2>
- 2e4:	14 d0       	rcall	.+40     	; 0x30e <__udivmodsi4>
- 2e6:	0a d0       	rcall	.+20     	; 0x2fc <__divmodsi4_neg1>
- 2e8:	00 1c       	adc	r0, r0
- 2ea:	38 f4       	brcc	.+14     	; 0x2fa <__divmodsi4_exit>
+000003d8 <__udivmodhi4_loop>:
+ 3d8:	aa 1f       	adc	r26, r26
+ 3da:	bb 1f       	adc	r27, r27
+ 3dc:	a6 17       	cp	r26, r22
+ 3de:	b7 07       	cpc	r27, r23
+ 3e0:	10 f0       	brcs	.+4      	; 0x3e6 <__udivmodhi4_ep>
+ 3e2:	a6 1b       	sub	r26, r22
+ 3e4:	b7 0b       	sbc	r27, r23
 
-000002ec <__divmodsi4_neg2>:
- 2ec:	50 95       	com	r21
- 2ee:	40 95       	com	r20
- 2f0:	30 95       	com	r19
- 2f2:	21 95       	neg	r18
- 2f4:	3f 4f       	sbci	r19, 0xFF	; 255
- 2f6:	4f 4f       	sbci	r20, 0xFF	; 255
- 2f8:	5f 4f       	sbci	r21, 0xFF	; 255
+000003e6 <__udivmodhi4_ep>:
+ 3e6:	88 1f       	adc	r24, r24
+ 3e8:	99 1f       	adc	r25, r25
+ 3ea:	5a 95       	dec	r21
+ 3ec:	a9 f7       	brne	.-22     	; 0x3d8 <__udivmodhi4_loop>
+ 3ee:	80 95       	com	r24
+ 3f0:	90 95       	com	r25
+ 3f2:	bc 01       	movw	r22, r24
+ 3f4:	cd 01       	movw	r24, r26
+ 3f6:	08 95       	ret
 
-000002fa <__divmodsi4_exit>:
- 2fa:	08 95       	ret
+000003f8 <__divmodsi4>:
+ 3f8:	97 fb       	bst	r25, 7
+ 3fa:	09 2e       	mov	r0, r25
+ 3fc:	05 26       	eor	r0, r21
+ 3fe:	0e d0       	rcall	.+28     	; 0x41c <__divmodsi4_neg1>
+ 400:	57 fd       	sbrc	r21, 7
+ 402:	04 d0       	rcall	.+8      	; 0x40c <__divmodsi4_neg2>
+ 404:	14 d0       	rcall	.+40     	; 0x42e <__udivmodsi4>
+ 406:	0a d0       	rcall	.+20     	; 0x41c <__divmodsi4_neg1>
+ 408:	00 1c       	adc	r0, r0
+ 40a:	38 f4       	brcc	.+14     	; 0x41a <__divmodsi4_exit>
 
-000002fc <__divmodsi4_neg1>:
- 2fc:	f6 f7       	brtc	.-4      	; 0x2fa <__divmodsi4_exit>
- 2fe:	90 95       	com	r25
- 300:	80 95       	com	r24
- 302:	70 95       	com	r23
- 304:	61 95       	neg	r22
- 306:	7f 4f       	sbci	r23, 0xFF	; 255
- 308:	8f 4f       	sbci	r24, 0xFF	; 255
- 30a:	9f 4f       	sbci	r25, 0xFF	; 255
- 30c:	08 95       	ret
+0000040c <__divmodsi4_neg2>:
+ 40c:	50 95       	com	r21
+ 40e:	40 95       	com	r20
+ 410:	30 95       	com	r19
+ 412:	21 95       	neg	r18
+ 414:	3f 4f       	sbci	r19, 0xFF	; 255
+ 416:	4f 4f       	sbci	r20, 0xFF	; 255
+ 418:	5f 4f       	sbci	r21, 0xFF	; 255
 
-0000030e <__udivmodsi4>:
- 30e:	a1 e2       	ldi	r26, 0x21	; 33
- 310:	1a 2e       	mov	r1, r26
- 312:	aa 1b       	sub	r26, r26
- 314:	bb 1b       	sub	r27, r27
- 316:	fd 01       	movw	r30, r26
- 318:	0d c0       	rjmp	.+26     	; 0x334 <__udivmodsi4_ep>
+0000041a <__divmodsi4_exit>:
+ 41a:	08 95       	ret
 
-0000031a <__udivmodsi4_loop>:
- 31a:	aa 1f       	adc	r26, r26
- 31c:	bb 1f       	adc	r27, r27
- 31e:	ee 1f       	adc	r30, r30
- 320:	ff 1f       	adc	r31, r31
- 322:	a2 17       	cp	r26, r18
- 324:	b3 07       	cpc	r27, r19
- 326:	e4 07       	cpc	r30, r20
- 328:	f5 07       	cpc	r31, r21
- 32a:	20 f0       	brcs	.+8      	; 0x334 <__udivmodsi4_ep>
- 32c:	a2 1b       	sub	r26, r18
- 32e:	b3 0b       	sbc	r27, r19
- 330:	e4 0b       	sbc	r30, r20
- 332:	f5 0b       	sbc	r31, r21
+0000041c <__divmodsi4_neg1>:
+ 41c:	f6 f7       	brtc	.-4      	; 0x41a <__divmodsi4_exit>
+ 41e:	90 95       	com	r25
+ 420:	80 95       	com	r24
+ 422:	70 95       	com	r23
+ 424:	61 95       	neg	r22
+ 426:	7f 4f       	sbci	r23, 0xFF	; 255
+ 428:	8f 4f       	sbci	r24, 0xFF	; 255
+ 42a:	9f 4f       	sbci	r25, 0xFF	; 255
+ 42c:	08 95       	ret
 
-00000334 <__udivmodsi4_ep>:
- 334:	66 1f       	adc	r22, r22
- 336:	77 1f       	adc	r23, r23
- 338:	88 1f       	adc	r24, r24
- 33a:	99 1f       	adc	r25, r25
- 33c:	1a 94       	dec	r1
- 33e:	69 f7       	brne	.-38     	; 0x31a <__udivmodsi4_loop>
- 340:	60 95       	com	r22
- 342:	70 95       	com	r23
- 344:	80 95       	com	r24
- 346:	90 95       	com	r25
- 348:	9b 01       	movw	r18, r22
- 34a:	ac 01       	movw	r20, r24
- 34c:	bd 01       	movw	r22, r26
- 34e:	cf 01       	movw	r24, r30
- 350:	08 95       	ret
+0000042e <__udivmodsi4>:
+ 42e:	a1 e2       	ldi	r26, 0x21	; 33
+ 430:	1a 2e       	mov	r1, r26
+ 432:	aa 1b       	sub	r26, r26
+ 434:	bb 1b       	sub	r27, r27
+ 436:	fd 01       	movw	r30, r26
+ 438:	0d c0       	rjmp	.+26     	; 0x454 <__udivmodsi4_ep>
 
-00000352 <_exit>:
- 352:	f8 94       	cli
+0000043a <__udivmodsi4_loop>:
+ 43a:	aa 1f       	adc	r26, r26
+ 43c:	bb 1f       	adc	r27, r27
+ 43e:	ee 1f       	adc	r30, r30
+ 440:	ff 1f       	adc	r31, r31
+ 442:	a2 17       	cp	r26, r18
+ 444:	b3 07       	cpc	r27, r19
+ 446:	e4 07       	cpc	r30, r20
+ 448:	f5 07       	cpc	r31, r21
+ 44a:	20 f0       	brcs	.+8      	; 0x454 <__udivmodsi4_ep>
+ 44c:	a2 1b       	sub	r26, r18
+ 44e:	b3 0b       	sbc	r27, r19
+ 450:	e4 0b       	sbc	r30, r20
+ 452:	f5 0b       	sbc	r31, r21
 
-00000354 <__stop_program>:
- 354:	ff cf       	rjmp	.-2      	; 0x354 <__stop_program>
+00000454 <__udivmodsi4_ep>:
+ 454:	66 1f       	adc	r22, r22
+ 456:	77 1f       	adc	r23, r23
+ 458:	88 1f       	adc	r24, r24
+ 45a:	99 1f       	adc	r25, r25
+ 45c:	1a 94       	dec	r1
+ 45e:	69 f7       	brne	.-38     	; 0x43a <__udivmodsi4_loop>
+ 460:	60 95       	com	r22
+ 462:	70 95       	com	r23
+ 464:	80 95       	com	r24
+ 466:	90 95       	com	r25
+ 468:	9b 01       	movw	r18, r22
+ 46a:	ac 01       	movw	r20, r24
+ 46c:	bd 01       	movw	r22, r26
+ 46e:	cf 01       	movw	r24, r30
+ 470:	08 95       	ret
+
+00000472 <_exit>:
+ 472:	f8 94       	cli
+
+00000474 <__stop_program>:
+ 474:	ff cf       	rjmp	.-2      	; 0x474 <__stop_program>

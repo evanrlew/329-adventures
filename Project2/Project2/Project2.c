@@ -3,6 +3,8 @@
 #define SCK  1  				// PB pin 1
 #define SS   0  				// PB pin 0
 #define TIMER1_PRESCALE 64
+#define NUM_SAW_POINTS 64
+#define NUM_SINE_POINTS 64
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -19,33 +21,31 @@ enum FG_STATE {
 	SAWTOOTH,
 	SINE
 };
+ 
+static uint16_t SINE_VALS[NUM_SINE_POINTS] = {2048,2249,2448,2643,2832,3013,3186,3347,3496,3631,3751,3854,3940,4008,4057,4086,4095,4086,4057,4008,3940,3854,3751,3631,3496,3347,3186,3013,2832,2643,2448,2249,2048,1847,1648,1453,1264,1083,910,749,600,465,345,242,156,88,39,10,0,10,39,88,156,242,345,465,600,749,910,1083,1264,1453,1648,1847};
 
 volatile enum SPI_XFER_STATE spi_state = XFER_FINISHED;
 volatile uint8_t spi_msb = 0;
 volatile uint8_t spi_lsb = 0;
 
-volatile enum FG_STATE fg_state = SQUARE;
-
-volatile uint16_t saw_val = 0;
+volatile enum FG_STATE fg_state = SINE;
 
 void initTimer1(void);
 void set_pulse(uint16_t duty, uint16_t freq);
 
 void initTimer3(void);
+void set_saw_freq(uint16_t freq);
+void set_sine_freq(uint16_t freq);
 
 void set_DAC_data(uint16_t data);
 void Initialize_SPI_Master(void);
 void Transmit_SPI_Master(void);
 
 int main(void)
-{
-	int count = 0;
-	int val = 0;
-	int incr = 0x100 / 16;
-	
-	initTimer1();
-	TCCR1B = 0; // turn off to test ramp 
-	TIMSK1 = 0;
+{	
+	//initTimer1();
+	//TCCR1B = 0; // turn off to test ramp 
+	//TIMSK1 = 0;
 	
 	initTimer3(); // timer for sine/sawtooth
 	sei();
@@ -54,29 +54,9 @@ int main(void)
 	Initialize_SPI_Master();
 	
 	//set_pulse(23, 500);
+	set_saw_freq(433);
 	
-	while(1)
-	{
-		
-		
-		/*
-		for (count = 0; count < 16; count+
-		+) {
-			val += incr;
-			spi_msb = (val >> 8 & 0xF) | 0x70;
-			spi_lsb = val & 0xFF;
-			Transmit_SPI_Master();
-			_delay_ms(6);
-		}
-		
-		for (count = 0; count < 16; count ++) {
-			val -= incr;
-			spi_msb = (val >> 8 & 0xF) | 0x70;
-			spi_lsb = val & 0xFF;
-			Transmit_SPI_Master();
-			_delay_ms(6);
-		}*/
-	}  // end while
+	while(1);
 	return 0;
 }  // end main
 
@@ -94,14 +74,11 @@ void initTimer1(void)
 
 void initTimer3(void)
 {
-	TCCR1A = 0x00;                          // configure counter wave mode and compare mode
-	TCCR1B = (1<<CS11)|(1<<CS10)|(1<<WGM12);          // clock prescale 1/64, wave mode
-	OCR1AH = 0x01;                          // compare reg a = 500
-	OCR1AL = 0xF4;
-	OCR1BH = 0x00;                          // compare reg b = 125
-	OCR1BL = 0x7D;
-	TIMSK1 = (1<<ICIE1)|(1<<OCIE1A)|(1<<OCIE1B); // enable interupts for a and b
-}	
+	TCCR3A = 0x00;                          // configure counter wave mode and compare mode
+	TCCR3B = (1<<CS30)|(1<<WGM32);          // clock no prescale, wave mode
+	TIMSK3 = (1<<ICIE3)|(1<<OCIE3A); // enable interupts for a and b
+	TIFR3 = 0x00;
+}
 
 void set_pulse(uint16_t duty, uint16_t freq) {
 	uint16_t ticks_per_period = F_CPU / TIMER1_PRESCALE / freq;
@@ -114,6 +91,20 @@ void set_pulse(uint16_t duty, uint16_t freq) {
 	// calculate and set duty
 	OCR1BH = ticks_per_duty >> 8;                          // compare reg b
 	OCR1BL = ticks_per_duty & 0xFF;
+}
+
+void set_saw_freq(uint16_t freq) {
+	uint16_t ticks_per_step = F_CPU / freq / NUM_SAW_POINTS;
+	
+	OCR3AH = ticks_per_step >> 8;
+	OCR3AL = ticks_per_step & 0xFF;
+}
+
+void set_sine_freq(uint16_t freq) {
+	uint16_t ticks_per_step = F_CPU / freq / NUM_SINE_POINTS;
+	
+	OCR3AH = ticks_per_step >> 8;
+	OCR3AL = ticks_per_step & 0xFF;
 }
 
 void set_DAC_data(uint16_t data) {
@@ -133,7 +124,7 @@ void Initialize_SPI_Master(void)
 	
 	SPSR = (0<<SPIF) | 		//SPI interrupt flag
 	(0<<WCOL) | 			//Write collision flag
-	(0<<SPI2X) ; 			//Doubles SPI clock
+	(1<<SPI2X) ; 			//Doubles SPI clock
 	PORTB = 1 << SS;  		// make sure SS is high
 }
 
@@ -174,18 +165,27 @@ ISR(TIMER3_COMPA_vect) {
 	uint16_t dac_val;
 	
 	if (fg_state == SAWTOOTH) {	
+		static uint16_t saw_val = 0;
+		
 		if (saw_val == 0xFFF)
 			saw_val = 0;
 		else
-			saw_val += 0x1000 / 0x100;
+			saw_val += 4096 / NUM_SAW_POINTS;
 	
-		if (saw_val >= 0x1000)
+		if (saw_val >= 0x1000) // dac can only take in 0xFFF and lower
 			saw_val = 0xFFF;
 		
 		dac_val = saw_val;
 	}
 	else if (fg_state == SINE) {
+		static uint16_t sine_cnt = 0;
 		
+		if (sine_cnt == NUM_SINE_POINTS) {
+			sine_cnt = 0;
+		}			
+		
+		dac_val = SINE_VALS[sine_cnt];
+		sine_cnt ++;
 	}		
 				
 	set_DAC_data(dac_val);
