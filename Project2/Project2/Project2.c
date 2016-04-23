@@ -2,9 +2,14 @@
 #define MOSI 2  				// PB pin 2
 #define SCK  1  				// PB pin 1
 #define SS   0  				// PB pin 0
+
 #define TIMER1_PRESCALE 64
 #define NUM_SAW_POINTS 64
 #define NUM_SINE_POINTS 64
+
+#define WAVE_TYPE_BTN 5
+#define FREQ_VAL_BTN 6
+#define DUTY_CYCLE_BTN 7
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -41,8 +46,15 @@ void set_DAC_data(uint16_t data);
 void Initialize_SPI_Master(void);
 void Transmit_SPI_Master(void);
 
+void initButtons(void);
+void pollButtons(void);
+
 int main(void)
 {	
+	initButtons();
+	
+	initTimer0();
+	
 	//initTimer1();
 	//TCCR1B = 0; // turn off to test ramp 
 	//TIMSK1 = 0;
@@ -56,9 +68,28 @@ int main(void)
 	//set_pulse(23, 500);
 	set_saw_freq(433);
 	
-	while(1);
+	while(1) {
+		pollButtons();
+	}
 	return 0;
 }  // end main
+
+void initButtons(void) {
+	DDRF &= ~(1<<WAVE_TYPE_BTN | 1<<FREQ_VAL_BTN | 1<<DUTY_CYCLE_BTN);
+	PORTF |= 1<<WAVE_TYPE_BTN | 1<<FREQ_VAL_BTN | 1<<DUTY_CYCLE_BTN;
+}
+
+void pollButtons(void) {
+	if (!(PINF & 1<<WAVE_TYPE_BTN)) { 
+	
+	}		 
+	else if (!(PINF & 1<<FREQ_VAL_BTN)) {
+		
+	}
+	else if (!(PINF & 1<<DUTY_CYCLE_BTN)) {
+		
+	}
+}
 
 void initTimer1(void)
 {
