@@ -7,9 +7,9 @@
 #define NUM_SAW_POINTS 64
 #define NUM_SINE_POINTS 64
 
-#define WAVE_TYPE_BTN 5
-#define FREQ_VAL_BTN 6
-#define DUTY_CYCLE_BTN 7
+#define WAVE_TYPE_BTN 0
+#define FREQ_VAL_BTN 1
+#define DUTY_CYCLE_BTN 4
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -33,14 +33,23 @@ volatile enum SPI_XFER_STATE spi_state = XFER_FINISHED;
 volatile uint8_t spi_msb = 0;
 volatile uint8_t spi_lsb = 0;
 
-volatile enum FG_STATE fg_state = SINE;
+volatile uint32_t duty = 10;
+volatile uint32_t freq = 100;
+
+volatile enum FG_STATE fg_state = SAWTOOTH;
 
 void initTimer1(void);
-void set_pulse(uint16_t duty, uint16_t freq);
-
+void set_wave(void);
 void initTimer3(void);
-void set_saw_freq(uint16_t freq);
-void set_sine_freq(uint16_t freq);
+
+void timer1_on(void);
+void timer1_off(void);
+void timer3_on(void);
+void timer3_off(void);
+
+void change_wave_type(void);
+void change_frequency(void);
+void change_duty(void);
 
 void set_DAC_data(uint16_t data);
 void Initialize_SPI_Master(void);
@@ -52,21 +61,15 @@ void pollButtons(void);
 int main(void)
 {	
 	initButtons();
-	
-	initTimer0();
-	
-	//initTimer1();
-	//TCCR1B = 0; // turn off to test ramp 
-	//TIMSK1 = 0;
-	
+	initTimer1(); // timer for square
 	initTimer3(); // timer for sine/sawtooth
+	set_wave();
+	
+	timer3_on();
 	sei();
 	
 	DDRB = 1<<MOSI | 1<<SCK | 1<<SS;	// make MOSI, SCK and SS outputs
 	Initialize_SPI_Master();
-	
-	//set_pulse(23, 500);
-	set_saw_freq(433);
 	
 	while(1) {
 		pollButtons();
@@ -75,30 +78,77 @@ int main(void)
 }  // end main
 
 void initButtons(void) {
-	DDRF &= ~(1<<WAVE_TYPE_BTN | 1<<FREQ_VAL_BTN | 1<<DUTY_CYCLE_BTN);
-	PORTF |= 1<<WAVE_TYPE_BTN | 1<<FREQ_VAL_BTN | 1<<DUTY_CYCLE_BTN;
+	DDRD &= ~(1<<WAVE_TYPE_BTN | 1<<FREQ_VAL_BTN);
+	PORTD |= 1<<WAVE_TYPE_BTN | 1<<FREQ_VAL_BTN;
+	DDRF &= ~(1<<DUTY_CYCLE_BTN);
+	PORTF |= 1<<DUTY_CYCLE_BTN;
 }
 
 void pollButtons(void) {
-	if (!(PINF & 1<<WAVE_TYPE_BTN)) { 
+	int i;
 	
-	}		 
-	else if (!(PINF & 1<<FREQ_VAL_BTN)) {
-		
+	if (!(PIND & 1<<WAVE_TYPE_BTN)) { 
+		change_wave_type();
+		_delay_ms(100);
 	}
-	else if (!(PINF & 1<<DUTY_CYCLE_BTN)) {
-		
+	if (!(PINF & 1<<DUTY_CYCLE_BTN)) {
+		change_duty();
+		_delay_ms(100);
 	}
+	if (!(PIND & 1<<FREQ_VAL_BTN)) {
+		change_frequency();
+		_delay_ms(100);
+	}
+}
+
+void change_wave_type() {
+
+	if (fg_state == SQUARE) {
+		timer1_off();
+		fg_state = SAWTOOTH;
+		timer3_on();
+	}		
+	else if (fg_state == SAWTOOTH) {
+		fg_state = SINE;
+	}
+	else if (fg_state == SINE) {
+		timer3_off();
+		fg_state = SQUARE;
+		timer1_on();
+	} else {
+		fg_state = SINE;
+	}
+	set_wave();
+}
+
+void change_frequency(void) {
+	if (freq == 500) {
+		freq = 100;
+	}
+	else {
+		freq += 100;
+	}
+	set_wave();
+}
+
+void change_duty(void) {
+	if (duty == 90) {
+		duty = 10;
+	}
+	else {
+		duty += 10;
+	}
+	set_wave();
 }
 
 void initTimer1(void)
 {
 	TCCR1A = 0x00;                          // configure counter wave mode and compare mode
-	TCCR1B = (1<<CS11)|(1<<CS10)|(1<<WGM12);          // clock prescale 1/64, wave mode
-	OCR1AH = 0x01;                          // compare reg a = 500
-	OCR1AL = 0xF4;
-	OCR1BH = 0x00;                          // compare reg b = 125
-	OCR1BL = 0x7D;
+	TCCR1B = (1<<WGM12);								// clock off initially
+	//OCR1AH = 0x01;                          // compare reg a = 500
+	//OCR1AL = 0xF4;
+	//OCR1BH = 0x00;                          // compare reg b = 125
+	//OCR1BL = 0x7D;	
 	TIMSK1 = (1<<ICIE1)|(1<<OCIE1A)|(1<<OCIE1B); // enable interupts for a and b
 	TIFR1 = 0x00;
 }
@@ -106,36 +156,56 @@ void initTimer1(void)
 void initTimer3(void)
 {
 	TCCR3A = 0x00;                          // configure counter wave mode and compare mode
-	TCCR3B = (1<<CS30)|(1<<WGM32);          // clock no prescale, wave mode
+	TCCR3B = (1<<WGM32);          // clock off , wave mode
 	TIMSK3 = (1<<ICIE3)|(1<<OCIE3A); // enable interupts for a and b
 	TIFR3 = 0x00;
 }
 
-void set_pulse(uint16_t duty, uint16_t freq) {
-	uint16_t ticks_per_period = F_CPU / TIMER1_PRESCALE / freq;
-	uint16_t ticks_per_duty = ticks_per_period * duty / 100;
+void timer1_on(void) {
+	TCCR1B |= (1<<CS11)|(1<<CS10); // clock prescale 1/64, wave mode
+	TIMSK1 = (1<<ICIE1)|(1<<OCIE1A)|(1<<OCIE1B);
+}
+
+void timer1_off(void) {
+	TCCR1B &= ~(1 << CS10 | 1 << CS11 | 1 << CS12);
+	TIMSK1 = 0;
+}
+
+void timer3_on(void) {
+	TCCR3B |= (1<<CS30);          // clock no prescale
+	TIMSK3 = (1<<ICIE3)|(1<<OCIE3A);
+}	
+	
+void timer3_off(void) {
+	TCCR3B &= ~(1 << CS30);
+	TIMSK3 = 0;
+}
+
+void set_wave(void) {
+	uint32_t sq_ticks_per_period = F_CPU / TIMER1_PRESCALE / freq;
+	uint32_t ticks_per_duty = sq_ticks_per_period * duty / 100;
+	
+	uint16_t saw_ticks_per_step;
+	uint16_t sin_ticks_per_step;
 	
 	// calculate and set frequency
-	OCR1AH = ticks_per_period >> 8;                          // compare reg a
-	OCR1AL = ticks_per_period & 0xFF;
+	OCR1AH = sq_ticks_per_period >> 8 & 0xFF;                          // compare reg a
+	OCR1AL = sq_ticks_per_period & 0xFF;
 	
 	// calculate and set duty
-	OCR1BH = ticks_per_duty >> 8;                          // compare reg b
+	OCR1BH = ticks_per_duty >> 8 & 0xFF;                          // compare reg b
 	OCR1BL = ticks_per_duty & 0xFF;
-}
 
-void set_saw_freq(uint16_t freq) {
-	uint16_t ticks_per_step = F_CPU / freq / NUM_SAW_POINTS;
-	
-	OCR3AH = ticks_per_step >> 8;
-	OCR3AL = ticks_per_step & 0xFF;
-}
-
-void set_sine_freq(uint16_t freq) {
-	uint16_t ticks_per_step = F_CPU / freq / NUM_SINE_POINTS;
-	
-	OCR3AH = ticks_per_step >> 8;
-	OCR3AL = ticks_per_step & 0xFF;
+	if (fg_state == SAWTOOTH) {
+		saw_ticks_per_step = F_CPU / freq / NUM_SAW_POINTS;
+		OCR3AH = saw_ticks_per_step >> 8;
+		OCR3AL = saw_ticks_per_step & 0xFF;
+	}	
+	else if (fg_state == SINE) {
+		sin_ticks_per_step = F_CPU / freq / NUM_SINE_POINTS;
+		OCR3AH = sin_ticks_per_step >> 8;
+		OCR3AL = sin_ticks_per_step & 0xFF;		
+	}
 }
 
 void set_DAC_data(uint16_t data) {
@@ -193,7 +263,7 @@ ISR(TIMER1_COMPB_vect) {
 }
 
 ISR(TIMER3_COMPA_vect) {
-	uint16_t dac_val;
+	uint16_t dac_val = 0;
 	
 	if (fg_state == SAWTOOTH) {	
 		static uint16_t saw_val = 0;
