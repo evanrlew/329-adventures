@@ -1,0 +1,1 @@
+void make_noise(void);
