@@ -16,8 +16,8 @@ void make_noise() {
 
 	if (usart_istheredata()) {
 		uart_data = usart_recv(); // receive midi data - note on/off
-		
-		if ((uart_data & ON_CMD) && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
+
+		if ((uart_data & ON_CMD)) { // && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
 			timer3_on();
 			key = usart_recv();
 				
@@ -26,24 +26,34 @@ void make_noise() {
 			freq = MIDI_TO_FREQ[key];
 			set_wave();
 			
-			velocity = usart_recv();	
+			velocity = usart_recv();
+			change_velocity_scale(velocity);
 		}
-		else if ((uart_data & OFF_CMD) && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
+		else if ((uart_data & OFF_CMD)) {// && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
 			timer3_off();
 			usart_recv();
 			usart_recv();
 		}
 		else {
+			timer3_off();
 			usart_recv();
 			usart_recv();
 		}
-		
-		 
-		// process midi
-		// generate appropriate waveform
-		// set freq and/or duty
-		//freq = 5000;
-		
-		//set_wave();
+	}
+}
+
+void change_velocity_scale(uint8_t velocity) {
+	
+	if (velocity > 96) {
+		velocity_scale = 0;
+	}		
+	else if (velocity > 64) {
+		velocity_scale = 1;
+	}
+	else if (velocity > 32) {
+		velocity_scale = 2;
+	}
+	else {
+		velocity_scale = 3;
 	}
 }

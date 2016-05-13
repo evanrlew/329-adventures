@@ -10,8 +10,9 @@
 #define SS   0  				// PB pin 0
 
 #define TIMER1_PRESCALE 64
-#define NUM_SAW_POINTS 64
+#define NUM_SAW_POINTS 16
 #define NUM_SINE_POINTS 16
+#define NUM_TRI_POINTS 16
 
 static uint16_t SINE_VALS[NUM_SINE_POINTS] = {2048, 2832, 3496, 3940, 4095, 3940, 3496, 2832, 2048, 1264, 600, 156, 0, 156, 600, 1264};
 
@@ -21,6 +22,7 @@ volatile uint8_t spi_lsb = 0;
 
 volatile uint32_t duty = 10;
 volatile uint32_t freq = 1000;
+volatile uint32_t velocity_scale = 1;
 
 volatile enum FG_STATE fg_state = SINE;
 
@@ -37,7 +39,7 @@ void initTimer3(void)
 {
 	TCCR1A = 0x00;                // configure counter wave mode and compare mode
 	TCCR1B = (1<<WGM12);          // clock off , wave mode
-	TIMSK1 = (1<<ICIE1)|(1<<OCIE1A); // enable interrupts for a
+	TIMSK1 = (1<<OCIE1A); // enable interrupts for a
 	TIFR1 = 0x00;
 }
 /*
@@ -53,7 +55,8 @@ void timer1_off(void) {
 
 void timer3_on(void) {
 	TCCR1B |= (1<<CS10); // no prescale on the clock
-	TIMSK1 = (1<<ICIE1)|(1<<OCIE1A);
+	TIMSK1 = (1<<OCIE1A);
+	TIFR1 = 0x00;
 }	
 	
 void timer3_off(void) {
@@ -67,6 +70,7 @@ void set_wave(void) {
 	
 	uint16_t saw_ticks_per_step;
 	uint16_t sin_ticks_per_step;
+	uint16_t tri_ticks_per_step;
 	/*
 	// calculate and set frequency
 	OCR1AH = sq_ticks_per_period >> 8 & 0xFF;
@@ -78,13 +82,18 @@ void set_wave(void) {
 
 	if (fg_state == SAWTOOTH) {
 		saw_ticks_per_step = F_CPU / freq / NUM_SAW_POINTS;
-		OCR3AH = saw_ticks_per_step >> 8;
-		OCR3AL = saw_ticks_per_step & 0xFF;
+		OCR1AH = saw_ticks_per_step >> 8;
+		OCR1AL = saw_ticks_per_step & 0xFF;
 	}	
 	if (fg_state == SINE) {
 		sin_ticks_per_step = F_CPU / freq / NUM_SINE_POINTS;
 		OCR1AH = sin_ticks_per_step >> 8;
 		OCR1AL = sin_ticks_per_step & 0xFF;		
+	}
+	else if (fg_state == TRIANGLE) {
+		tri_ticks_per_step = F_CPU / freq / NUM_TRI_POINTS;
+		OCR1AH = sin_ticks_per_step >> 8;
+		OCR1AL = sin_ticks_per_step & 0xFF;
 	}
 }
 
@@ -145,17 +154,20 @@ ISR(TIMER1_COMPB_vect) {
 
 ISR(TIMER1_COMPA_vect) {
 	uint16_t dac_val = 0;
-	
+
 	if (fg_state == SAWTOOTH) {	
 		static uint16_t saw_val = 0;
-		
-		if (saw_val == 0xFFF)
+
+		if (saw_val == 0xFFF) {
 			saw_val = 0;
-		else
+		}			
+		else {
 			saw_val += 4096 / NUM_SAW_POINTS;
-	
-		if (saw_val >= 0x1000) // dac can only take in 0xFFF and lower
+		}			
+
+		if (saw_val >= 0x1000) { // dac can only take in 0xFFF and lower
 			saw_val = 0xFFF;
+		}			
 		
 		dac_val = saw_val;
 	}
@@ -164,12 +176,30 @@ ISR(TIMER1_COMPA_vect) {
 		
 		if (sine_cnt == NUM_SINE_POINTS) {
 			sine_cnt = 0;
-		}			
-		
+		}
+
 		dac_val = SINE_VALS[sine_cnt];
 		sine_cnt ++;
-	}		
-				
+	}
+	else if (fg_state == TRIANGLE) {
+		static int direction = 1;
+		static uint16_t tri_val = 0;
+						
+		tri_val += direction * 2 * 4096 / NUM_TRI_POINTS;
+		
+		if (tri_val >= 4096) {
+			tri_val = 0xFFF;
+			direction = -1;
+		} 
+		else if (tri_val <  2 * 4096 / NUM_TRI_POINTS - 1) {
+			tri_val = 0;
+			direction = 1;
+		}
+		
+		dac_val = tri_val;
+	}
+
+	dac_val = dac_val >> velocity_scale;
 	set_DAC_data(dac_val);
 	Transmit_SPI_Master();
 }

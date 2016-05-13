@@ -15,14 +15,16 @@ int main(void)
 	initTimer3(); // timer for sine/sawtooth
 	set_wave();
 	
-	//timer1_off();
-	timer3_on();
+	timer3_off();
+	//timer3_on();
 	sei();
 
 	Initialize_SPI_Master();
 	
 	while (1) {
-		//make_noise();
+		make_noise();
+	//	_delay_ms(500);
+		//timer3_off();
 	}
 	return 0;
 }  // end main

@@ -10,7 +10,8 @@ enum SPI_XFER_STATE {
 enum FG_STATE {
 	SQUARE,
 	SAWTOOTH,
-	SINE
+	SINE,
+	TRIANGLE
 };
 
 //void initTimer1(void);
