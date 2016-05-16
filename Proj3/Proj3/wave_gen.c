@@ -24,7 +24,7 @@ volatile uint32_t duty = 10;
 volatile uint32_t freq = 1000;
 volatile uint32_t velocity_scale = 1;
 
-volatile enum FG_STATE fg_state = SINE;
+volatile enum FG_STATE fg_state = SAWTOOTH;
 
 /*
 void initTimer1(void)
@@ -201,5 +201,10 @@ ISR(TIMER1_COMPA_vect) {
 
 	dac_val = dac_val >> velocity_scale;
 	set_DAC_data(dac_val);
+	Transmit_SPI_Master();
+}
+
+void clear_DAC(void) {
+	set_DAC_data(2048);
 	Transmit_SPI_Master();
 }

@@ -24,5 +24,6 @@ void timer3_on(void);
 void timer3_off(void);
 
 void set_DAC_data(uint16_t data);
+void clear_DAC(void);
 void Initialize_SPI_Master(void);
 void Transmit_SPI_Master(void);

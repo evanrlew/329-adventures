@@ -2,8 +2,11 @@
 #include "UART.h"
 #include "wave_gen.h"
 
+#include <avr/io.h>
+
 #define OFF_CMD 0x80
 #define ON_CMD 0x90
+#define CMD_MASK 0xF0
 #define CHANNEL_MASK 0xF
 #define CHANNEL_NUM 0
 
@@ -15,13 +18,14 @@ void make_noise() {
 	uint8_t velocity;
 
 	if (usart_istheredata()) {
+		PORTC ^= 1 << PC7;
 		uart_data = usart_recv(); // receive midi data - note on/off
 
-		if ((uart_data & ON_CMD)) { // && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
+		if ((uart_data & CMD_MASK) == ON_CMD) { // && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
 			timer3_on();
 			key = usart_recv();
 				
-			key = key < 21? 0: key - 21;
+			key = key < 33? 0 : (key - 33);
 			
 			freq = MIDI_TO_FREQ[key];
 			set_wave();
@@ -29,13 +33,15 @@ void make_noise() {
 			velocity = usart_recv();
 			change_velocity_scale(velocity);
 		}
-		else if ((uart_data & OFF_CMD)) {// && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
+		else if ((uart_data & CMD_MASK) == OFF_CMD) {// && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
 			timer3_off();
+			clear_DAC();
 			usart_recv();
 			usart_recv();
 		}
 		else {
 			timer3_off();
+			clear_DAC();
 			usart_recv();
 			usart_recv();
 		}
