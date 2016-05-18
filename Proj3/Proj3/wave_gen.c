@@ -15,71 +15,73 @@
 #define NUM_TRI_POINTS 16
 
 static uint16_t SINE_VALS[NUM_SINE_POINTS] = {2048, 2832, 3496, 3940, 4095, 3940, 3496, 2832, 2048, 1264, 600, 156, 0, 156, 600, 1264};
+static uint16_t TRI_VALS[NUM_TRI_POINTS] = {0, 512, 1024, 1536, 2048, 2560, 3072, 3584, 4095, 3584, 3072, 2560, 2049, 1536, 1025, 512};
 
 volatile enum SPI_XFER_STATE spi_state = XFER_FINISHED;
 volatile uint8_t spi_msb = 0;
 volatile uint8_t spi_lsb = 0;
 
-volatile uint32_t duty = 10;
+volatile uint32_t duty = 50;
 volatile uint32_t freq = 1000;
 volatile uint32_t velocity_scale = 1;
 
-volatile enum FG_STATE fg_state = SAWTOOTH;
+volatile enum FG_STATE fg_state = SQUARE;
 
-/*
 void initTimer1(void)
 {
-	TCCR1A = 0x00;                          // configure counter wave mode and compare mode
-	TCCR1B = (1<<WGM12);								// clock off initially
-	TIMSK1 = (1<<ICIE1)|(1<<OCIE1A)|(1<<OCIE1B); // enable interrupts for a and b
-	TIFR1 = 0x00;
-}*/
-
-void initTimer3(void)
-{
 	TCCR1A = 0x00;                // configure counter wave mode and compare mode
-	TCCR1B = (1<<WGM12);          // clock off , wave mode
+	TCCR1B = (1<<WGM12) ;          // clock off , wave mode
 	TIMSK1 = (1<<OCIE1A); // enable interrupts for a
 	TIFR1 = 0x00;
 }
-/*
-void timer1_on(void) {
-	TCCR1B |= (1<<CS11)|(1<<CS10); // clock prescale 1/64
-	TIMSK1 = (1<<ICIE1)|(1<<OCIE1A)|(1<<OCIE1B);
-}
 
-void timer1_off(void) {
-	TCCR1B &= ~(1 << CS10 | 1 << CS11 | 1 << CS12);
-	TIMSK1 = 0;
-}*/
-
-void timer3_on(void) {
+void timer1_on( void )
+{
 	TCCR1B |= (1<<CS10); // no prescale on the clock
-	TIMSK1 = (1<<OCIE1A);
+	TIMSK1 = (1<<OCIE1A) | (1<<OCIE1B);
 	TIFR1 = 0x00;
 }	
 	
-void timer3_off(void) {
-	TCCR1B &= ~(1 << CS10);
+void timer1_off( void )
+{
 	TIMSK1 = 0;
 }
 
+void change_wave(enum FG_STATE state) {
+	fg_state = state;
+	
+	if (state == SQUARE) {
+		TCCR1B |= (1<<CS11) | (1<<CS10);
+		
+		// need OCB for duty cycle
+		TIMSK1 |= 1<<OCIE1B;
+	}
+	else {
+		// CS10 bit is still on
+		TCCR1B &= ~(1<<CS11);
+		
+		// turn off output compare B
+		TIMSK1 &= ~(1<<OCIE1B);
+	}	
+}
+
 void set_wave(void) {
-//	uint32_t sq_ticks_per_period = F_CPU / TIMER1_PRESCALE / freq;
-//	uint32_t ticks_per_duty = sq_ticks_per_period * duty / 100;
+	uint32_t sq_ticks_per_period = F_CPU / TIMER1_PRESCALE / freq;
+	uint32_t ticks_per_duty = sq_ticks_per_period * duty / 100;
 	
 	uint16_t saw_ticks_per_step;
 	uint16_t sin_ticks_per_step;
 	uint16_t tri_ticks_per_step;
-	/*
-	// calculate and set frequency
-	OCR1AH = sq_ticks_per_period >> 8 & 0xFF;
-	OCR1AL = sq_ticks_per_period & 0xFF;
-	
-	// calculate and set duty
-	OCR1BH = ticks_per_duty >> 8 & 0xFF;
-	OCR1BL = ticks_per_duty & 0xFF;*/
 
+	if (fg_state == SQUARE) {	
+		// calculate and set frequency
+		OCR1AH = sq_ticks_per_period >> 8 & 0xFF;
+		OCR1AL = sq_ticks_per_period & 0xFF;
+	
+		// calculate and set duty
+		OCR1BH = ticks_per_duty >> 8 & 0xFF;
+		OCR1BL = ticks_per_duty & 0xFF;
+	}	
 	if (fg_state == SAWTOOTH) {
 		saw_ticks_per_step = F_CPU / freq / NUM_SAW_POINTS;
 		OCR1AH = saw_ticks_per_step >> 8;
@@ -90,10 +92,10 @@ void set_wave(void) {
 		OCR1AH = sin_ticks_per_step >> 8;
 		OCR1AL = sin_ticks_per_step & 0xFF;		
 	}
-	else if (fg_state == TRIANGLE) {
+	if (fg_state == TRIANGLE) {
 		tri_ticks_per_step = F_CPU / freq / NUM_TRI_POINTS;
-		OCR1AH = sin_ticks_per_step >> 8;
-		OCR1AL = sin_ticks_per_step & 0xFF;
+		OCR1AH = tri_ticks_per_step >> 8;
+		OCR1AL = tri_ticks_per_step & 0xFF;
 	}
 }
 
@@ -137,24 +139,16 @@ void Transmit_SPI_Master(void) {
 	}
 }
 
-
 ISR(SPI_STC_vect) {
 	Transmit_SPI_Master();
 }
-/*
-ISR(TIMER1_COMPA_vect) {
-	set_DAC_data(0xFFF);
-	Transmit_SPI_Master();
-}
-
-ISR(TIMER1_COMPB_vect) {
-	set_DAC_data(0);
-	Transmit_SPI_Master();
-*/
 
 ISR(TIMER1_COMPA_vect) {
 	uint16_t dac_val = 0;
 
+	if (fg_state == SQUARE) {
+		dac_val = 0xFFF;
+	}
 	if (fg_state == SAWTOOTH) {	
 		static uint16_t saw_val = 0;
 
@@ -179,28 +173,26 @@ ISR(TIMER1_COMPA_vect) {
 		}
 
 		dac_val = SINE_VALS[sine_cnt];
-		sine_cnt ++;
+		sine_cnt++;
 	}
 	else if (fg_state == TRIANGLE) {
-		static int direction = 1;
-		static uint16_t tri_val = 0;
-						
-		tri_val += direction * 2 * 4096 / NUM_TRI_POINTS;
+		static uint16_t tri_cnt = 0;
 		
-		if (tri_val >= 4096) {
-			tri_val = 0xFFF;
-			direction = -1;
-		} 
-		else if (tri_val <  2 * 4096 / NUM_TRI_POINTS - 1) {
-			tri_val = 0;
-			direction = 1;
+		if (tri_cnt == NUM_TRI_POINTS) {
+			tri_cnt = 0;
 		}
 		
-		dac_val = tri_val;
+		dac_val = TRI_VALS[tri_cnt];
+		tri_cnt++;
 	}
 
 	dac_val = dac_val >> velocity_scale;
 	set_DAC_data(dac_val);
+	Transmit_SPI_Master();
+}
+
+ISR(TIMER1_COMPB_vect) {
+	set_DAC_data(0);
 	Transmit_SPI_Master();
 }
 

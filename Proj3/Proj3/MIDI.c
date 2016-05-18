@@ -18,29 +18,29 @@ void make_noise() {
 	uint8_t velocity;
 
 	if (usart_istheredata()) {
-		PORTC ^= 1 << PC7;
 		uart_data = usart_recv(); // receive midi data - note on/off
 
 		if ((uart_data & CMD_MASK) == ON_CMD) { // && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
-			timer3_on();
+			timer1_on();
 			key = usart_recv();
 				
 			key = key < 33? 0 : (key - 33);
 			
 			freq = MIDI_TO_FREQ[key];
-			set_wave();
-			
+						
 			velocity = usart_recv();
 			change_velocity_scale(velocity);
+			
+			set_wave();
 		}
 		else if ((uart_data & CMD_MASK) == OFF_CMD) {// && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
-			timer3_off();
+			timer1_off();
 			clear_DAC();
 			usart_recv();
 			usart_recv();
 		}
 		else {
-			timer3_off();
+			timer1_off();
 			clear_DAC();
 			usart_recv();
 			usart_recv();

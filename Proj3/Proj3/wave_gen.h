@@ -16,12 +16,13 @@ enum FG_STATE {
 
 //void initTimer1(void);
 void set_wave(void);
-void initTimer3(void);
+void change_wave(enum FG_STATE state);
+void initTimer1(void);
 
 //void timer1_on(void);
 //void timer1_off(void);
-void timer3_on(void);
-void timer3_off(void);
+void timer1_on(void);
+void timer1_off(void);
 
 void set_DAC_data(uint16_t data);
 void clear_DAC(void);
