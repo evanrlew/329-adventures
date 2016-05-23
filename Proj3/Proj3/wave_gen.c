@@ -21,11 +21,17 @@ volatile enum SPI_XFER_STATE spi_state = XFER_FINISHED;
 volatile uint8_t spi_msb = 0;
 volatile uint8_t spi_lsb = 0;
 
-volatile uint32_t duty = 50;
+volatile uint32_t duty = 25;
 volatile uint32_t freq = 1000;
 volatile uint32_t velocity_scale = 1;
+volatile uint32_t env_mod = 0;
 
 volatile enum FG_STATE fg_state = SQUARE;
+
+/*void initTimer0(void) {
+	TCCR0A = 0x00;
+	TCCR1B = (1<<WGM12);
+}*/
 
 void initTimer1(void)
 {
@@ -186,7 +192,7 @@ ISR(TIMER1_COMPA_vect) {
 		tri_cnt++;
 	}
 
-	dac_val = dac_val >> velocity_scale;
+	dac_val = dac_val / velocity_scale;
 	set_DAC_data(dac_val);
 	Transmit_SPI_Master();
 }
@@ -197,6 +203,6 @@ ISR(TIMER1_COMPB_vect) {
 }
 
 void clear_DAC(void) {
-	set_DAC_data(2048);
+	set_DAC_data(0);
 	Transmit_SPI_Master();
 }

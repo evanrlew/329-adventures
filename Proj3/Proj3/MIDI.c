@@ -23,9 +23,9 @@ void make_noise() {
 		if ((uart_data & CMD_MASK) == ON_CMD) { // && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
 			timer1_on();
 			key = usart_recv();
-				
+
 			key = key < 33? 0 : (key - 33);
-			
+
 			freq = MIDI_TO_FREQ[key];
 						
 			velocity = usart_recv();
@@ -50,6 +50,8 @@ void make_noise() {
 
 void change_velocity_scale(uint8_t velocity) {
 	
+	velocity_scale = 6 - velocity / 24;
+	/*
 	if (velocity > 96) {
 		velocity_scale = 0;
 	}		
@@ -61,5 +63,5 @@ void change_velocity_scale(uint8_t velocity) {
 	}
 	else {
 		velocity_scale = 3;
-	}
+	}*/
 }

@@ -12,7 +12,7 @@ int main(void)
 {	
 	usart_init(31250, F_CPU);
 	initTimer1(); // timer for sine/sawtooth
-	change_wave(TRIANGLE);
+	change_wave(SQUARE);
 	set_wave();
 		
 	sei();
