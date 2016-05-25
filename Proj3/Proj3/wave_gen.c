@@ -108,7 +108,7 @@ void Initialize_SPI_Master(void)
 {
 	DDRB = 1<<MOSI | 1<<SCK | 1<<SS; // make MOSI, SCK and SS outputs
 		
-	SPCR = (1<<SPIE) | 		//interrupts enabled
+	SPCR = (0<<SPIE) | 		//interrupts enabled
 	(1<<SPE) | 				//SPI enabled
 	(0<<DORD) | 			//send MSB first
 	(1<<MSTR) | 			//master
@@ -123,26 +123,17 @@ void Initialize_SPI_Master(void)
 }
 
 void Transmit_SPI_Master(void) {
-	
-	if (spi_state == XFER_FINISHED) {
-		spi_state = MSB_SENT;
-		PORTB &= ~(1 << SS); 		  //Assert slave select (active low) 		
+		PORTF ^= (1<<PF1);				// debug
+
+		PORTB &= ~(1 << SS); 			//Assert slave select (active low) 		
 		SPDR = spi_msb;
-	}
-	else if (spi_state == MSB_SENT) {
-		spi_state = LSB_SENT;
+		while (!(SPSR & (1 << SPIF)));
 		SPDR = spi_lsb;
-	}
-	else {
-		spi_state = XFER_FINISHED;
+		while (!(SPSR & (1 << SPIF)));
 		PORTB |= 1 << SS;
-	}
 }
 
-ISR(SPI_STC_vect) {
-	PORTF ^= (1<<PF1);
-	Transmit_SPI_Master();
-}
+
 
 ISR(TIMER1_COMPA_vect) {
 	uint16_t dac_val = 0;
