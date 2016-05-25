@@ -10,11 +10,12 @@
 
 int main(void)
 {	
+	DDRF |= (1<<PF1);
 	usart_init(31250, F_CPU);
 	initTimer1(); // timer for sine/sawtooth
+	initTimer3();
 	change_wave(SQUARE);
 	set_wave();
-		
 	sei();
 
 	Initialize_SPI_Master();

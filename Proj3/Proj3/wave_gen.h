@@ -1,6 +1,8 @@
 #pragma once
 #include <stdint.h>
 
+extern volatile uint8_t env_mod;
+
 enum SPI_XFER_STATE {
 	XFER_FINISHED,
 	MSB_SENT,

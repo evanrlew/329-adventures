@@ -1,6 +1,7 @@
 #include "MIDI.h"
 #include "UART.h"
 #include "wave_gen.h"
+#include "EnvGen.h"
 
 #include <avr/io.h>
 
@@ -21,17 +22,17 @@ void make_noise() {
 		uart_data = usart_recv(); // receive midi data - note on/off
 
 		if ((uart_data & CMD_MASK) == ON_CMD) { // && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
-			timer1_on();
+			
 			key = usart_recv();
-
 			key = key < 33? 0 : (key - 33);
-
 			freq = MIDI_TO_FREQ[key];
-						
+			
 			velocity = usart_recv();
 			change_velocity_scale(velocity);
 			
-			set_wave();
+			set_wave();			
+			start_atk_timer(100);
+			timer1_on();
 		}
 		else if ((uart_data & CMD_MASK) == OFF_CMD) {// && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
 			timer1_off();

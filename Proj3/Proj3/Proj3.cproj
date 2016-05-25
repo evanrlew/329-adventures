@@ -67,6 +67,12 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="EnvGen.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="EnvGen.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="MIDI.c">
       <SubType>compile</SubType>
     </Compile>

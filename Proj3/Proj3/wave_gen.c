@@ -1,10 +1,10 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
-#include "wave_gen.h"
-
 #define F_CPU 16000000
 
+#include "wave_gen.h"
+#include "EnvGen.h"
 #define MOSI 2  				// PB pin 2
 #define SCK  1  				// PB pin 1
 #define SS   0  				// PB pin 0
@@ -24,21 +24,15 @@ volatile uint8_t spi_lsb = 0;
 volatile uint32_t duty = 25;
 volatile uint32_t freq = 1000;
 volatile uint32_t velocity_scale = 1;
-volatile uint32_t env_mod = 0;
 
 volatile enum FG_STATE fg_state = SQUARE;
 
-/*void initTimer0(void) {
-	TCCR0A = 0x00;
-	TCCR1B = (1<<WGM12);
-}*/
-
 void initTimer1(void)
 {
-	TCCR1A = 0x00;                // configure counter wave mode and compare mode
+	TCCR1A = 0;                // configure counter wave mode and compare mode
 	TCCR1B = (1<<WGM12) ;          // clock off , wave mode
 	TIMSK1 = (1<<OCIE1A); // enable interrupts for a
-	TIFR1 = 0x00;
+	TIFR1 = 0;
 }
 
 void timer1_on( void )
@@ -114,7 +108,7 @@ void Initialize_SPI_Master(void)
 {
 	DDRB = 1<<MOSI | 1<<SCK | 1<<SS; // make MOSI, SCK and SS outputs
 		
-	SPCR = (1<<SPIE) | 		//No interrupts
+	SPCR = (1<<SPIE) | 		//interrupts enabled
 	(1<<SPE) | 				//SPI enabled
 	(0<<DORD) | 			//send MSB first
 	(1<<MSTR) | 			//master
@@ -146,6 +140,7 @@ void Transmit_SPI_Master(void) {
 }
 
 ISR(SPI_STC_vect) {
+	PORTF ^= (1<<PF1);
 	Transmit_SPI_Master();
 }
 
@@ -192,7 +187,7 @@ ISR(TIMER1_COMPA_vect) {
 		tri_cnt++;
 	}
 
-	dac_val = dac_val / velocity_scale;
+	dac_val = dac_val / (velocity_scale + env_mod);
 	set_DAC_data(dac_val);
 	Transmit_SPI_Master();
 }
