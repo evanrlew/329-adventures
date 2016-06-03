@@ -1,6 +1,6 @@
 #include "MIDI.h"
 #include "UART.h"
-#include "wave_gen.h"
+#include "WaveGen.h"
 #include "EnvGen.h"
 
 #include <avr/io.h>

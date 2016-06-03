@@ -3,7 +3,7 @@
 
 #define F_CPU 16000000
 
-#include "wave_gen.h"
+#include "WaveGen.h"
 #include "EnvGen.h"
 #define MOSI 2  				// PB pin 2
 #define SCK  1  				// PB pin 1
@@ -30,15 +30,18 @@ volatile enum FG_STATE fg_state = SQUARE;
 void initTimer1(void)
 {
 	TCCR1A = 0;                // configure counter wave mode and compare mode
-	TCCR1B = (1<<WGM12) ;          // clock off , wave mode
-	TIMSK1 = (1<<OCIE1A); // enable interrupts for a
+	TCCR1B = (1<<WGM12) | (1<<CS10);    // clock on, no prescale , wave mode
+	TIMSK1 = 0; // disable interrupts for timer1 
 	TIFR1 = 0;
 }
 
 void timer1_on( void )
 {
-	TCCR1B |= (1<<CS10); // no prescale on the clock
-	TIMSK1 = (1<<OCIE1A) | (1<<OCIE1B);
+	TIMSK1 = 1<<OCIE1A;
+
+	if (fg_state == SQUARE) 
+		TIMSK1 |= (1<<OCIE1B);
+
 	TIFR1 = 0x00;
 }	
 	
@@ -63,6 +66,26 @@ void change_wave(enum FG_STATE state) {
 		// turn off output compare B
 		TIMSK1 &= ~(1<<OCIE1B);
 	}	
+}
+
+void next_wave(void) {
+	if (fg_state == TRIANGLE) {
+		fg_state = SQUARE;
+	}		
+	else { 
+		fg_state++;
+	}		
+	change_wave(fg_state);
+}
+
+void prev_wave(void) {
+	if (fg_state == SQUARE) {
+		fg_state = TRIANGLE;
+	}
+	else {
+		fg_state--;
+	}
+	change_wave(fg_state);
 }
 
 void set_wave(void) {
@@ -123,7 +146,6 @@ void Initialize_SPI_Master(void)
 }
 
 void Transmit_SPI_Master(void) {
-		PORTF ^= (1<<PF1);				// debug
 
 		PORTB &= ~(1 << SS); 			//Assert slave select (active low) 		
 		SPDR = spi_msb;
@@ -132,7 +154,6 @@ void Transmit_SPI_Master(void) {
 		while (!(SPSR & (1 << SPIF)));
 		PORTB |= 1 << SS;
 }
-
 
 
 ISR(TIMER1_COMPA_vect) {

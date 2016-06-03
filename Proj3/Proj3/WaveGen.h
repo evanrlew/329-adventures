@@ -19,6 +19,8 @@ enum FG_STATE {
 //void initTimer1(void);
 void set_wave(void);
 void change_wave(enum FG_STATE state);
+void next_wave(void);
+void prev_wave(void);
 void initTimer1(void);
 
 //void timer1_on(void);

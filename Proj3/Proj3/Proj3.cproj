@@ -82,16 +82,22 @@
     <Compile Include="Proj3.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="ProxSensor.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="ProxSensor.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="UART.c">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="UART.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="wave_gen.c">
+    <Compile Include="WaveGen.c">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="wave_gen.h">
+    <Compile Include="WaveGen.h">
       <SubType>compile</SubType>
     </Compile>
   </ItemGroup>
