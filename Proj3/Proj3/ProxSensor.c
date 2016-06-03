@@ -23,21 +23,51 @@ void monitor_sensor() {
 	ProxStatus status;
 	GestureType gesture;
 	int z,x;
+	
+	//static char hover_mode = 0;
 
 	_delay_ms(1);
 	status = data_available();
+	
 	if (status == GEST_AVAIL) {
 		_delay_ms(1);
 		gesture = readGesture();
 		if (gesture == RIGHT_SWIPE) {
-			PORTF ^= 1;
+			//PORTF ^= 1;
 			next_wave();
 		}
 		else if (gesture == LEFT_SWIPE) {
-			PORTF ^=2;
+			//PORTF ^=2;
 			prev_wave();
 		}
 	}
+	
+	/*
+	if (!hover_mode) {
+		if (status == GEST_AVAIL) {
+			_delay_ms(1);
+			gesture = readGesture();
+			if (gesture == RIGHT_SWIPE) {
+				PORTF ^= 1;
+				next_wave();
+			}
+			else if (gesture == LEFT_SWIPE) {
+				PORTF ^=2;
+				prev_wave();
+			}
+		}
+		else if (status == HOVER_AVAIL) {
+			hover_mode = 1;
+		}
+	}
+	else {
+		if (status == POS_AVAIL) {
+			_delay_ms(1);
+			z = read_prox_sensor(ZX_ZPOS);
+			_delay_ms(1);
+			x = read_prox_sensor(ZX_XPOS);		
+		}
+	}*/
 }
 
 //writes data value to register with address regAdd
@@ -142,7 +172,7 @@ int read_prox_sensor(uint8_t regAdd) {
 
 	// check if status is no "repeated start"
 	if( TW_STATUS != TW_REP_START ){
-		exit(-1);
+		return 0;
 	}
 
 	// slave address to read from

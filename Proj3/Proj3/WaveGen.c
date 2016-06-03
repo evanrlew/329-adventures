@@ -147,12 +147,12 @@ void Initialize_SPI_Master(void)
 
 void Transmit_SPI_Master(void) {
 
-		PORTB &= ~(1 << SS); 			//Assert slave select (active low) 		
-		SPDR = spi_msb;
-		while (!(SPSR & (1 << SPIF)));
-		SPDR = spi_lsb;
-		while (!(SPSR & (1 << SPIF)));
-		PORTB |= 1 << SS;
+	PORTB &= ~(1 << SS); 			//Assert slave select (active low) 		
+	SPDR = spi_msb;
+	while (!(SPSR & (1 << SPIF)));
+	SPDR = spi_lsb;
+	while (!(SPSR & (1 << SPIF)));
+	PORTB |= 1 << SS;
 }
 
 

@@ -22,7 +22,7 @@ int main(void)
 
 	Initialize_SPI_Master();
 	while (1) {
-		make_noise();
+		//make_noise();
 		monitor_sensor();
 	}
 	return 0;
