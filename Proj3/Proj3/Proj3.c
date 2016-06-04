@@ -4,10 +4,13 @@
 #include "UART.h"
 #include "MIDI.h"
 #include "ProxSensor.h"
+#include "EnvGen.h"
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include <util/delay.h>
+
+extern volatile MIDI_XFER_STATE midi_xfer_state;
 
 int main(void)
 {	
@@ -22,8 +25,9 @@ int main(void)
 
 	Initialize_SPI_Master();
 	while (1) {
-		//make_noise();
-		monitor_sensor();
+		if (midi_xfer_state == MIDI_WAITING) {
+			monitor_sensor();
+		}			
 	}
 	return 0;
 }  // end main

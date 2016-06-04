@@ -70,7 +70,7 @@ void change_wave(enum FG_STATE state) {
 
 void next_wave(void) {
 	if (fg_state == TRIANGLE) {
-		fg_state = SQUARE;
+		fg_state = SINE;
 	}		
 	else { 
 		fg_state++;
@@ -79,7 +79,7 @@ void next_wave(void) {
 }
 
 void prev_wave(void) {
-	if (fg_state == SQUARE) {
+	if (fg_state == SINE) {
 		fg_state = TRIANGLE;
 	}
 	else {

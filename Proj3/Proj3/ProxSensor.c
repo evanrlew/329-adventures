@@ -22,37 +22,34 @@ void monitor_sensor() {
 	uint8_t data;
 	ProxStatus status;
 	GestureType gesture;
-	int z,x;
+//	static int z,x, prev_z, prev_x;
 	
-	//static char hover_mode = 0;
+//	static char hover_mode = 0;
 
-	_delay_ms(1);
+	PORTF ^= 1;
+	_delay_ms(50);
 	status = data_available();
 	
 	if (status == GEST_AVAIL) {
-		_delay_ms(1);
+		_delay_ms(50);
 		gesture = readGesture();
 		if (gesture == RIGHT_SWIPE) {
-			//PORTF ^= 1;
 			next_wave();
 		}
 		else if (gesture == LEFT_SWIPE) {
-			//PORTF ^=2;
 			prev_wave();
 		}
 	}
 	
-	/*
+/*
 	if (!hover_mode) {
 		if (status == GEST_AVAIL) {
 			_delay_ms(1);
 			gesture = readGesture();
 			if (gesture == RIGHT_SWIPE) {
-				PORTF ^= 1;
 				next_wave();
 			}
 			else if (gesture == LEFT_SWIPE) {
-				PORTF ^=2;
 				prev_wave();
 			}
 		}
@@ -61,11 +58,21 @@ void monitor_sensor() {
 		}
 	}
 	else {
+		PORTF ^= 1;
 		if (status == POS_AVAIL) {
 			_delay_ms(1);
 			z = read_prox_sensor(ZX_ZPOS);
-			_delay_ms(1);
-			x = read_prox_sensor(ZX_XPOS);		
+		
+			if (((z-prev_z) > 0)  && atk_time < 2000) {
+				atk_time += 50;
+			}			
+			else if (((z-prev_z) < 0) && atk_time > 100) {
+				atk_time -= 50;
+			}
+			prev_z = z;
+		}
+		else if (status == HOVER_MV_AVAIL) {
+			hover_mode = 0;
 		}
 	}*/
 }

@@ -1,3 +1,5 @@
+#pragma once
+
 /* ZX Sensor register addresses */
 #define ZX_STATUS           0x00
 #define ZX_DRE              0x01
@@ -12,6 +14,7 @@
 #define ZX_REGVER           0xFE
 #define ZX_MODEL            0xFF
 
+extern volatile uint16_t atk_time;
 
 typedef enum ProxStatus{
 	NONE, GEST_AVAIL, HOVER_AVAIL, HOVER_MV_AVAIL, POS_AVAIL
@@ -26,6 +29,8 @@ typedef enum GestureType {
 	NO_GESTURE = 0xFF
 } GestureType;
 
+void init_sensor();
+void monitor_sensor();
 void write_prox_sensor(uint8_t regAdd, uint8_t data);
 int read_prox_sensor(uint8_t regAdd);
 ProxStatus data_available();
