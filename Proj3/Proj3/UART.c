@@ -1,3 +1,7 @@
+/*
+ * Handles UART communication
+ */
+
 #include <stdlib.h>					// Standard C library
 #include <avr/io.h>					// Input-output ports, special registers
 

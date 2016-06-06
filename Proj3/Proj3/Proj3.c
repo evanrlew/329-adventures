@@ -1,3 +1,8 @@
+/* 
+ * Contains the main that initializes all the peripherals and 
+ * the main loop that monitors the gesture sensor
+ */
+
 #define F_CPU 16000000 			// define internal CLK speed
 
 #include "WaveGen.h"

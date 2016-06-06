@@ -1,3 +1,7 @@
+/* 
+ * Creates the timer that generates the waveform envelope
+ */
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 

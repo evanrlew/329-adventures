@@ -1,3 +1,8 @@
+/* 
+ * Processes any incoming MIDI data and translates it
+ * into a analog waveform
+ */
+
 #include "MIDI.h"
 #include "UART.h"
 #include "WaveGen.h"
