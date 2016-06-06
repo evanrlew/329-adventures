@@ -13,7 +13,6 @@
 #define CHANNEL_NUM 0
 
 volatile MIDI_XFER_STATE midi_xfer_state = MIDI_WAITING;
-volatile uint16_t atk_time = 100;
 
 volatile uint8_t midi_cmd;
 volatile uint8_t midi_note;
@@ -27,55 +26,35 @@ void make_noise() {
 	uint8_t key;
 	uint8_t velocity;
 
-	//if (usart_istheredata()) {
-		//uart_data = usart_recv(); // receive midi data - note on/off
-
-		if ((midi_cmd & CMD_MASK) == ON_CMD) { // && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
+	if ((midi_cmd & CMD_MASK) == ON_CMD) {
+		key = midi_note;
+		key = key < 33? 0 : (key - 33);
+		freq = MIDI_TO_FREQ[key];
 			
-			key = midi_note;
-			key = key < 33? 0 : (key - 33);
-			freq = MIDI_TO_FREQ[key];
+		velocity = midi_vel;
+		change_velocity_scale(velocity);
 			
-			velocity = midi_vel;
-			change_velocity_scale(velocity);
-			
-			set_wave();			
-			start_atk_timer(100);
-			timer1_on();
-		}
-		else if ((midi_cmd & CMD_MASK) == OFF_CMD) {// && (uart_data & CHANNEL_MASK == CHANNEL_NUM)) {
-			timer1_off();
-			clear_DAC();
-			//usart_recv();
-			//usart_recv();
-		}
-		else {
-			timer1_off();
-			clear_DAC();
-			//usart_recv();
-			//usart_recv();
-		}
-	//}
+		set_wave();			
+		start_atk_timer(100);
+		timer1_on();
+	}
+	else if ((midi_cmd & CMD_MASK) == OFF_CMD) {
+		timer1_off();
+		clear_DAC();
+	}
+	else {
+		timer1_off();
+		clear_DAC();
+	}
 }
 
 void change_velocity_scale(uint8_t velocity) {
-	
 	velocity_scale = 6 - velocity / 24;
-	/*
-	if (velocity > 96) {
-		velocity_scale = 0;
-	}		
-	else if (velocity > 64) {
-		velocity_scale = 1;
-	}
-	else if (velocity > 32) {
-		velocity_scale = 2;
-	}
-	else {
-		velocity_scale = 3;
-	}*/
 }
 
+/* 
+ * Handles reciving all three command bytes
+ */
 ISR(USART1_RX_vect) {
 	if (midi_xfer_state == MIDI_WAITING) {
 		midi_cmd = usart_recv();

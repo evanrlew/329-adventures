@@ -1,13 +1,8 @@
 #pragma once
 #include <stdint.h>
 
+// Used for the attack
 extern volatile uint8_t env_mod;
-
-enum SPI_XFER_STATE {
-	XFER_FINISHED,
-	MSB_SENT,
-	LSB_SENT
-};
 
 enum FG_STATE {
 	SQUARE,
@@ -23,8 +18,6 @@ void next_wave(void);
 void prev_wave(void);
 void initTimer1(void);
 
-//void timer1_on(void);
-//void timer1_off(void);
 void timer1_on(void);
 void timer1_off(void);
 

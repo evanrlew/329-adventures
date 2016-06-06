@@ -13,7 +13,5 @@ typedef enum {
 	MIDI_NOTE_RCVD
 } MIDI_XFER_STATE;
 
-
-
 void make_noise(void);
 void change_velocity_scale(uint8_t velocity);

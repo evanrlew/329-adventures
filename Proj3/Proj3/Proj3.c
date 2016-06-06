@@ -18,12 +18,12 @@ int main(void)
 	usart_init(31250, F_CPU);
 	init_sensor();
 	initTimer1(); // timer for sine/sawtooth
-	initTimer3();
-	change_wave(SINE);
+	initTimer3(); // Envelope timer
+	
 	set_wave();
+	Initialize_SPI_Master();
 	sei();
 
-	Initialize_SPI_Master();
 	while (1) {
 		if (midi_xfer_state == MIDI_WAITING) {
 			monitor_sensor();

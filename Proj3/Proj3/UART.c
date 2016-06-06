@@ -10,8 +10,6 @@ void usart_init(uint16_t baudin, uint32_t clk_speedin)
 	uint32_t ubrr = (clk_speedin/16UL)/baudin-1;
 	UBRR1H = (unsigned char)(ubrr>>8) & 0xF;
 	UBRR1L = (unsigned char)ubrr;
-	/*UBRR0H = (BAUD_PRESCALE>>8);
-	UBRR0L = BAUD_PRESCALE;*/
 	/* Enable receiver and transmitter */
 	UCSR1B = (1<<RXEN1)|(1<<TXEN1)|(1<<RXCIE1);
 	/* Set frame format: 8data, 1stop bit */

@@ -11,8 +11,8 @@
 void init_sensor() {
 	DDRF = 0x3;
 		
-	TWBR = 0x12;
-	TWSR = 0x01;
+	TWBR = 0x12; // 100kHz SCL
+	TWSR = 0x01; // Prescalar of 4
 		
 	DDRD |= (1<<PD0) | (1<<PD1);
 	PORTD |= (1<<PD0) | (1<<PD1);
@@ -22,9 +22,6 @@ void monitor_sensor() {
 	uint8_t data;
 	ProxStatus status;
 	GestureType gesture;
-//	static int z,x, prev_z, prev_x;
-	
-//	static char hover_mode = 0;
 
 	PORTF ^= 1;
 	_delay_ms(50);
@@ -39,42 +36,7 @@ void monitor_sensor() {
 		else if (gesture == LEFT_SWIPE) {
 			prev_wave();
 		}
-	}
-	
-/*
-	if (!hover_mode) {
-		if (status == GEST_AVAIL) {
-			_delay_ms(1);
-			gesture = readGesture();
-			if (gesture == RIGHT_SWIPE) {
-				next_wave();
-			}
-			else if (gesture == LEFT_SWIPE) {
-				prev_wave();
-			}
-		}
-		else if (status == HOVER_AVAIL) {
-			hover_mode = 1;
-		}
-	}
-	else {
-		PORTF ^= 1;
-		if (status == POS_AVAIL) {
-			_delay_ms(1);
-			z = read_prox_sensor(ZX_ZPOS);
-		
-			if (((z-prev_z) > 0)  && atk_time < 2000) {
-				atk_time += 50;
-			}			
-			else if (((z-prev_z) < 0) && atk_time > 100) {
-				atk_time -= 50;
-			}
-			prev_z = z;
-		}
-		else if (status == HOVER_MV_AVAIL) {
-			hover_mode = 0;
-		}
-	}*/
+	}	
 }
 
 //writes data value to register with address regAdd
@@ -210,10 +172,8 @@ int read_prox_sensor(uint8_t regAdd) {
 	return data;
 }
 
-/**
- * @brief Indicates that a gesture is available to be read
- *
- * @return True if gesture is ready to be read. False otherwise.
+/*
+ * returns 1 if gesture is ready to be read. 0 otherwise.
  */
 ProxStatus data_available()
 {
@@ -242,20 +202,13 @@ ProxStatus data_available()
 	if (status & 0b00000001) {
 		return POS_AVAIL;
 	}
-
 	
     return NONE;
 }
 
 
-/**
- * @brief Reads the last detected gesture from the sensor
- *
- * 0x01 Right Swipe
- * 0x02 Left Swipe
- * 0x03 Up Swipe
- *
- * @return a number corresponding to  a gesture. 0xFF on error.
+/*
+ * returns a number corresponding to  a gesture. 0xFF on error.
  */
 GestureType readGesture()
 {

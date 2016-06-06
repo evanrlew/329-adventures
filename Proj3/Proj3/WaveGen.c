@@ -1,3 +1,10 @@
+/* 
+ * Handles everything needed to generate the waveform.
+ * This includes turning timers on/off, modifying wave parameters,
+ * calculating new OCR values, and then sending the data out to the
+ * DAC through SPI 
+ */
+
 #include <avr/io.h>
 #include <avr/interrupt.h>
 
@@ -14,13 +21,15 @@
 #define NUM_SINE_POINTS 16
 #define NUM_TRI_POINTS 16
 
+// Pre-calculated waveform values
 static uint16_t SINE_VALS[NUM_SINE_POINTS] = {2048, 2832, 3496, 3940, 4095, 3940, 3496, 2832, 2048, 1264, 600, 156, 0, 156, 600, 1264};
 static uint16_t TRI_VALS[NUM_TRI_POINTS] = {0, 512, 1024, 1536, 2048, 2560, 3072, 3584, 4095, 3584, 3072, 2560, 2049, 1536, 1025, 512};
 
-volatile enum SPI_XFER_STATE spi_state = XFER_FINISHED;
+// Used for holding upper and lower bytes of SPI data
 volatile uint8_t spi_msb = 0;
 volatile uint8_t spi_lsb = 0;
 
+// Wave parameters
 volatile uint32_t duty = 25;
 volatile uint32_t freq = 1000;
 volatile uint32_t velocity_scale = 1;
@@ -29,7 +38,7 @@ volatile enum FG_STATE fg_state = SQUARE;
 
 void initTimer1(void)
 {
-	TCCR1A = 0;                // configure counter wave mode and compare mode
+	TCCR1A = 0;  // configure counter wave mode and compare mode
 	TCCR1B = (1<<WGM12) | (1<<CS10);    // clock on, no prescale , wave mode
 	TIMSK1 = 0; // disable interrupts for timer1 
 	TIFR1 = 0;
@@ -37,10 +46,10 @@ void initTimer1(void)
 
 void timer1_on( void )
 {
-	TIMSK1 = 1<<OCIE1A;
+	TIMSK1 = 1<<OCIE1A; // Enable OCRA interrupt
 
 	if (fg_state == SQUARE) 
-		TIMSK1 |= (1<<OCIE1B);
+		TIMSK1 |= (1<<OCIE1B); // Enable OCRB interrupt only for square waves
 
 	TIFR1 = 0x00;
 }	
@@ -148,6 +157,8 @@ void Initialize_SPI_Master(void)
 void Transmit_SPI_Master(void) {
 
 	PORTB &= ~(1 << SS); 			//Assert slave select (active low) 		
+	
+	// Send data and wait for completion
 	SPDR = spi_msb;
 	while (!(SPSR & (1 << SPIF)));
 	SPDR = spi_lsb;
@@ -155,7 +166,9 @@ void Transmit_SPI_Master(void) {
 	PORTB |= 1 << SS;
 }
 
-
+/* 
+ * Determines what the next value on the wave needs to be output
+ */
 ISR(TIMER1_COMPA_vect) {
 	uint16_t dac_val = 0;
 
@@ -204,6 +217,7 @@ ISR(TIMER1_COMPA_vect) {
 	Transmit_SPI_Master();
 }
 
+// Used for square wave generation
 ISR(TIMER1_COMPB_vect) {
 	set_DAC_data(0);
 	Transmit_SPI_Master();
